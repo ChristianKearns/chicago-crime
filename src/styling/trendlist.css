@@ -33,6 +33,7 @@
     background-color: var(--white);
     border-radius: 15px;
     border: solid 2px var(--medium-blue);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.305);
 }
 
 .trend-subtitle {
