@@ -1,0 +1,58 @@
+@import url('./variables.css');
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--medium-blue);
+    color: var(--white);
+    max-width: 100%;
+}
+
+.logo {
+    text-decoration: none;
+    color: var(--white);
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.heading {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.sub-heading {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.link-container {
+    display: flex;
+    gap: 25px;
+    padding: 25px;
+}
+
+
+.link {
+    text-decoration: none; 
+    position: relative;
+    color: var(--white);
+}
+
+/* Add underline on hover */
+.link::after {
+    content: ''; 
+    position: absolute;
+    left: 0;
+    bottom: -2px; 
+    width: 100%;
+    height: 2px; 
+    background-color: var(--white);
+    transition: bottom 0.2s ease; 
+    visibility: hidden; 
+}
+
+.link:hover::after {
+    bottom: -4px; 
+    visibility: visible; 
+}
