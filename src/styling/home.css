@@ -1,6 +1,50 @@
 @import url('./variables.css');
 
-/* Top section */
+/* Welcome Pop-up */
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--popup-background-color);
+    backdrop-filter: blur(5px);
+}
+
+.popup-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: grid;
+    width: 50%;
+    margin: 20px;
+    padding: 20px;
+    padding-left: 25px;
+    padding-bottom: 40px;
+    background-color: var(--white);
+    border-radius: 15px;
+    border: solid 2px var(--medium-blue);
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 2;
+}
+
+.popup-btn {
+    position: absolute;
+    width: 100px;
+    height: fit-content;
+    padding: 10px;
+    bottom: 10px;
+    right: 10px;
+    background-color: var(--medium-blue);
+    color: var(--white);
+    border-radius: 5px;
+}
+
+.popup-btn:hover {
+    cursor: pointer;
+    background-color: var(--dark-blue);
+}
+
+/* Home page  */
 .top-container {
     display: grid;
     grid-template-columns: 50% 50%;

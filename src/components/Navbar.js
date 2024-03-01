@@ -20,7 +20,7 @@ export default function Navbar() {
             </Link>
             <Link
                 className="link"
-                to='/trends/defaulttrend'
+                to='/trends/1'
             >
                 Trends
             </Link>

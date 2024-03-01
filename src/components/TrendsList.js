@@ -1,25 +1,11 @@
 import '../styling/trendlist.css'
+import { useNavigate } from "react-router-dom";
 
 export default function TrendsList(props) {
-    function handleTrendClick() {
-        /* 
-        Psuedo-code for what it will prolly do
-        if(props.buttonType === "Select") {
-            -- Code that switches the displayed graph's button to say selected
-            -- Code that displays the appropriate graphs
-            -- Code that switches the displayed graph's button to --dark-blue background
-        }
+    const navigate = useNavigate();
 
-        else if (props.buttonType === "See more") {
-            -- Code that loads the Trends.js page with the appropriate graphs
-            Note: Routing supports using the url to pass this so it should be
-            as simple as routing to a string and then checks the params from the url
-            in the Trends.js page.
-        }
-
-        */
-
-        return null;
+    function handleTrendClick(num) {
+        navigate(`/trends/${num}`)    
     }
 
     return (
@@ -43,8 +29,8 @@ export default function TrendsList(props) {
                     types that occur before and during the GFC to predict a potential economic recession. Is there a correlation
                      between the rates of particular crime types with an economic recession ?
                 </div>
-                <div className='trend-btn' onClick={handleTrendClick}>
-                    {props.buttonType}
+                <div className={`trend-btn ${props.selectedTrend === "1" ? 'selected' : ''}`} onClick={() => handleTrendClick("1")}>
+                    {props.selectedTrend === "1" ? "Selected" : props.buttonType}
                 </div>
                 </div>
 
@@ -63,8 +49,8 @@ export default function TrendsList(props) {
                     statistics. This investigation seeks to identify patterns in neighborhood safety and school district performance, 
                     offering insights into the intricate relationship between Chicago's crime dynamics and educational quality.
                 </div>
-                <div className='trend-btn' onClick={handleTrendClick}>
-                    {props.buttonType}
+                <div className={`trend-btn ${props.selectedTrend === "2" ? 'selected' : ''}`} onClick={() => handleTrendClick("2")}>
+                    {props.selectedTrend === "2" ? "Selected" : props.buttonType}
                 </div>
                 </div>
         
@@ -81,8 +67,8 @@ export default function TrendsList(props) {
                     games growing up? These constraints can help to investigate the question of whether violent video 
                     games can cause boys to become violent once they reach adulthood.
                 </div>
-                <div className='trend-btn' onClick={handleTrendClick}>
-                    {props.buttonType}
+                <div className={`trend-btn ${props.selectedTrend === "3" ? 'selected' : ''}`} onClick={() => handleTrendClick("3")}>
+                    {props.selectedTrend === "3" ? "Selected" : props.buttonType}
                 </div>
                 </div>
 
@@ -97,8 +83,8 @@ export default function TrendsList(props) {
                     holiday season, would we see a relationship with the amount spent on gifts and the amount of crime committed? Our 
                     goal is to see if holidays and average holiday spending have any effect on crime.
                 </div>
-                <div className='trend-btn' onClick={handleTrendClick}>
-                    {props.buttonType}
+                <div className={`trend-btn ${props.selectedTrend === "4" ? 'selected' : ''}`} onClick={() => handleTrendClick("4")}>
+                    {props.selectedTrend === "4" ? "Selected" : props.buttonType}
                 </div>
                 </div>
 
@@ -113,8 +99,8 @@ export default function TrendsList(props) {
                     spikes in certain crime categories during particular times of the year and in specific districts, enabling 
                     proactive measures to mitigate potential risks.
                 </div>
-                <div className='trend-btn' onClick={handleTrendClick}>
-                    {props.buttonType}
+                <div className={`trend-btn ${props.selectedTrend === "5" ? 'selected' : ''}`} onClick={() => handleTrendClick("5")}>
+                    {props.selectedTrend === "5" ? "Selected" : props.buttonType}
                 </div>
                 </div>
             </div>

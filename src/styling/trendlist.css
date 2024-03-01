@@ -77,6 +77,10 @@
     bottom: 10px;
 }
 
+.trend-btn.selected {
+    background-color: var(--dark-blue);
+}
+
 .trend-btn:hover {
     background-color: var(--dark-blue);
     cursor: pointer;
