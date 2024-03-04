@@ -9,13 +9,13 @@ export default function App() {
   return(
     <>
       <Navbar/>
-      <div>
+      <body>
         <Routes>
           <Route path="/" element={<Homepage/>}/>
           <Route path="/trends/:trend" element={<Trends/>}/>
           <Route path="/map" element={<Map/>}/>
         </Routes>
-      </div>
+      </body>
     </>
   )
 }
