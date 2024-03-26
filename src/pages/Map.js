@@ -4,7 +4,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Button, Drawer, FormControl, IconButton, InputLabel, Select } from "@mui/material";
 import '../styling/map.css'
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import { Menu ,ChevronLeft, ChevronRight } from "@mui/icons-material";
 
 export default function Map() {
     const [open, setOpen] = useState(false);
@@ -14,9 +14,15 @@ export default function Map() {
 
     return(
       <div className="map-container">
-        <Button onClick={toggleDrawer(true)}>Open drawer</Button>
+        <IconButton 
+        className="sidebar-toggle-btn"
+        onClick={toggleDrawer(true)}
+        ><Menu /></IconButton>
         <Drawer open={open} onClose={toggleDrawer(false)}>
-            <IconButton onClick={toggleDrawer}>
+            <IconButton 
+            className="sidebar-toggle-btn"
+            onClick={toggleDrawer(false)}
+            >
               {open === true ? <ChevronLeft /> : <ChevronRight />}
             </IconButton>
           <div className="form-container">
