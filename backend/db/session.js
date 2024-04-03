@@ -1,6 +1,7 @@
 
 
-require('dotenv').config({path: 'C:\\Users\\chuer\\IdeaProjects\\chicago-crime\\.env'});
+require('dotenv').config({ path: `${__dirname}/../../.env` });
+
 const oracledb = require('oracledb');
 async function db() {
     try {
