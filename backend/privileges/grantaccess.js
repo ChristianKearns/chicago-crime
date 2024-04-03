@@ -1,7 +1,8 @@
 const db = require('../db/session');
 
 
-//I dont think any of you guys have to run this script, only me. since i created the group in the uf database and i have to grant access to the tables to the group members
+//I dont think any of you guys have to run this script, only Cristian Huerta. since i created the group in the uf database and i have to grant access to the tables to the group members
+
 async function grantAccess(session) {
     try {
         await session.execute(
