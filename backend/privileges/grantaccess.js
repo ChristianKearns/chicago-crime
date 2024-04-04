@@ -1,7 +1,14 @@
 const db = require('../db/session');
 
 
-//I dont think any of you guys have to run this script, only Cristian Huerta. since i created the group in the uf database and i have to grant access to the tables to the group members
+/*
+Everyone has to create each table,so there is not an issue when running this script.
+As without creating the table, the script will not run as the table does not exist
+in the db.
+Also note if your role does not including inserting tuples into a specific table,
+you table that matches that specific table will be empty. The other group member table
+specific to the table, will have the tuples inserted.
+ */
 
 async function grantAccess(session) {
     try {
@@ -14,6 +21,15 @@ async function grantAccess(session) {
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "PVENU"`
         );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "CHUERTA"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "NIKOLAS.PRASCHMA"`
+        );
+
+
+
 
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "HONGJIESHI"`
@@ -24,6 +40,14 @@ async function grantAccess(session) {
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "PVENU"`
         );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "CHUERTA"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "NIKOLAS.PRASCHMA"`
+        );
+
+
 
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON Location TO "HONGJIESHI"`
@@ -33,6 +57,12 @@ async function grantAccess(session) {
         );
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON Location TO "PVENU"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "CHUERTA"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "NIKOLAS.PRASCHMA"`
         );
 
         console.log('Granting access to all tables successfully');

@@ -24,6 +24,7 @@ async function createLocationTable(session) {
 async function initialize() {
     const session = await db;
     await createLocationTable(session);
+    await session.close();
 }
 
 initialize().then(r => console.log('completed Location Table creation'));

@@ -1,5 +1,9 @@
 const db = require('../db/session');
 
+/*
+
+Connection will be open, must close the connection after the script is run.
+ */
 async function createCrimeIncidentTable(session) {
     try {
         await session.execute(
@@ -29,6 +33,8 @@ async function initialize() {
         // Call the db function to obtain the session
         const session = await db;
         await createCrimeIncidentTable(session);
+        await session.close();
+
     } catch (error) {
         console.error('Error initializing:', error);
     }

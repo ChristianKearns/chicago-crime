@@ -16,7 +16,8 @@ async function createCrimeTypeTable(session) {
 
 async function initialize() {
     const session = await db;
-    await createCrimeTypeTable(session);
+    await createCrimeTypeTable(session)
+    await session.close();
 }
 
 initialize().then(r => console.log('completed Crime Type Table creation'));
