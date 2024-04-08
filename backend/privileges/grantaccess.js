@@ -28,9 +28,6 @@ async function grantAccess(session) {
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "NIKOLAS.PRASCHMA"`
         );
 
-
-
-
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "HONGJIESHI"`
         );
@@ -63,6 +60,38 @@ async function grantAccess(session) {
         );
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "NIKOLAS.PRASCHMA"`
+        );
+
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "HONGJIESHI"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "CHRISTIAN.KEARNS"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "PVENU"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "CHUERTA"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "NIKOLAS.PRASCHMA"`
+        );
+
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "HONGJIESHI"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "CHRISTIAN.KEARNS"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "PVENU"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "CHUERTA"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "NIKOLAS.PRASCHMA"`
         );
 
         console.log('Granting access to all tables successfully');
