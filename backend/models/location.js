@@ -7,14 +7,16 @@ async function createLocationTable(session) {
             `CREATE TABLE Location (
                 Latitude NUMBER(12, 9),
                 Longitude NUMBER(12, 9),
-                Location VARCHAR2(27),
-                Location_Description VARCHAR2(59),
+                Location VARCHAR2(30),
+                Location_Description VARCHAR2(60),
                 Community_Area NUMBER(5),
                 Block VARCHAR2(39),
                 District NUMBER(5)
              )
             `
         );
+
+        await session.execute('commit');
         console.log('Location table created successfully');
     } catch (error) {
         console.error('Error creating Location table :', error);

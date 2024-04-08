@@ -16,6 +16,7 @@ async function db() {
             connectString: 'oracle.cise.ufl.edu:1521/orcl' // Example connectString; adjust according to your Oracle database configuration
         });
         console.log('Connected to Oracle database');
+        console.log(session)
 
         return session;
 

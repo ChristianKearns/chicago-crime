@@ -78,6 +78,7 @@ async function initialize() {
         // Call the db function to obtain the session
         const session = await db;
         await grantAccess(session);
+        await session.close();
 
     } catch (error) {
         console.error('Error initializing:', error);

@@ -8,6 +8,8 @@ async function createCrimeTypeTable(session) {
              )
             `
         );
+
+        await session.execute('commit');
         console.log('CrimeType table created successfully');
     } catch (error) {
         console.error('Error creating CrimeType table :', error);
