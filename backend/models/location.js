@@ -5,13 +5,16 @@ async function createLocationTable(session) {
         console.log('session:', session)
         await session.execute(
             `CREATE TABLE Location (
+                Crime_ID SMALLINT,
                 Latitude NUMBER(12, 9),
                 Longitude NUMBER(12, 9),
                 Location VARCHAR2(30),
                 Location_Description VARCHAR2(60),
                 Community_Area NUMBER(5),
                 Block VARCHAR2(39),
-                District NUMBER(5)
+                District NUMBER(5),
+                PRIMARY KEY (Crime_ID),
+                FOREIGN KEY (Crime_ID) REFERENCES CrimeIncident(Unique_ID)
              )
             `
         );

@@ -13,6 +13,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Homepage/>}/>
           <Route path="/trends/:trend" element={<Trends/>}/>
+          <Route path="/trends" element={<Trends/>}/>
           <Route path="/map" element={<Map/>}/>
         </Routes>
       </div>

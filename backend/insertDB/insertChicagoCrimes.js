@@ -43,6 +43,7 @@ async function insertDataIntoOracle(data) {
 
             // Collect unique locations
             uniqueLocations.add({
+                Crime_ID: row[0],
                 Latitude: row[19],
                 Longitude: row[20],
                 Location: row[21],
@@ -73,6 +74,12 @@ async function insertDataIntoOracle(data) {
 
         console.log('Chicago Crime Incident inserted successfully into Oracle database.');
 
+        // Bulk insertion into Location table
+        const locationQuery = `INSERT INTO Location (Crime_ID,Latitude, Longitude, Location, Location_Description, Community_Area, Block, District) VALUES (:Crime_Id,:Latitude, :Longitude, :Location, :LocationDescription, :CommunityArea, :Block, :District)`;
+        await session.executeMany(locationQuery, locationDataArray);
+        await session.execute('commit');
+        console.log('Chicago Crime location inserted successfully into Oracle database.');
+
         // Bulk insertion into CrimeType table
         const crimeTypeQuery = `INSERT INTO CrimeType (PrimaryType) VALUES (:PrimaryType)`;
         await session.executeMany(crimeTypeQuery, crimeTypeDataArray);
@@ -80,12 +87,7 @@ async function insertDataIntoOracle(data) {
 
         console.log('Chicago Crime Type inserted successfully into Oracle database.');
 
-        // Bulk insertion into Location table
-        const locationQuery = `INSERT INTO Location (Latitude, Longitude, Location, Location_Description, Community_Area, Block, District) VALUES (:Latitude, :Longitude, :Location, :LocationDescription, :CommunityArea, :Block, :District)`;
-        await session.executeMany(locationQuery, locationDataArray);
-        await session.execute('commit');
 
-        console.log('Chicago Crime location inserted successfully into Oracle database.');
         await session.close();
     } catch (error) {
         console.error('Error inserting Chicago Crime data into Oracle database:', error);
@@ -137,7 +139,7 @@ function readCSVFile(filePath) {
     });
 }
 // Path to your CSV file
-const filePath = '.\\csv_files\\Crimes2021.csv';
+const filePath = '.\\csv_files\\Crimes2023.csv';
 
 // Read CSV file and extract data
 readCSVFile(filePath)
