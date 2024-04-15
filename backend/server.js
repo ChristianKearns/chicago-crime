@@ -127,43 +127,42 @@ app.get('/map-markers', async (req, res) => {
 app.get('/tuple-count', async (req, res) => {
     try {
         // Execute database query
-        const result = await session.execute('SELECT \'CrimeType\' AS crimetype, COUNT(*) AS count FROM CrimeType\n' +
-            'UNION ALL\n' +
-            'SELECT \'CrimeIncident\' AS crimeincident, COUNT(*) AS count FROM CrimeIncident\n' +
-            'UNION ALL\n' +
-            'SELECT \'Location\' AS location, COUNT(*) AS count FROM Location\n' +
-            'UNION ALL\n' +
-            'SELECT \'EVENTPERMIT\' AS eventpermit, COUNT(*) AS count FROM EVENTPERMIT\n' +
-            'UNION ALL\n' +
-            'SELECT \'STREETLIGHT\' AS streetlight, COUNT(*) AS count FROM STREETLIGHT\n' +
-            'UNION ALL\n' +
-            'SELECT \'SHOTSPOTTER\' AS shotspotter, COUNT(*) AS count FROM SHOTSPOTTER\n' +
-            'UNION ALL\n' +
-            'SELECT\n' +
-            '    \'Total\' AS table_name,\n' +
-            '    SUM(total_count) AS count\n' +
-            'FROM\n' +
-            '    (SELECT COUNT(*) AS total_count FROM CrimeType\n' +
-            '     UNION ALL\n' +
-            '     SELECT COUNT(*) FROM CrimeIncident\n' +
-            '     UNION ALL\n' +
-            '     SELECT COUNT(*) FROM Location\n' +
-            '     UNION ALL\n' +
-            '     SELECT COUNT(*) FROM EVENTPERMIT\n' +
-            '     UNION ALL\n' +
-            '     SELECT COUNT(*) FROM STREETLIGHT\n' +
-            '     UNION ALL\n' +
-            '     SELECT COUNT(*) FROM SHOTSPOTTER);');
+        const query = `
+            SELECT 'CrimeType' AS crimetype, COUNT(*) AS count FROM CrimeType 
+            UNION ALL 
+            SELECT 'CrimeIncident' AS crimeincident, COUNT(*) AS count FROM CrimeIncident 
+            UNION ALL 
+            SELECT 'Location' AS location, COUNT(*) AS count FROM Location 
+            UNION ALL 
+            SELECT 'EventPermit' AS eventpermit, COUNT(*) AS count FROM EventPermit 
+            UNION ALL 
+            SELECT 'Streetlight' AS streetlight, COUNT(*) AS count FROM Streetlight 
+            UNION ALL 
+            SELECT 'Shotspotter' AS shotspotter, COUNT(*) AS count FROM Shotspotter 
+            UNION ALL 
+            SELECT 'Total' AS table_name, SUM(total_count) AS count 
+            FROM (
+                SELECT COUNT(*) AS total_count FROM CrimeType 
+                UNION ALL 
+                SELECT COUNT(*) FROM CrimeIncident 
+                UNION ALL 
+                SELECT COUNT(*) FROM Location 
+                UNION ALL 
+                SELECT COUNT(*) FROM EventPermit 
+                UNION ALL 
+                SELECT COUNT(*) FROM Streetlight 
+                UNION ALL 
+                SELECT COUNT(*) FROM Shotspotter
+            )`;
+        const result = await session.execute(query);
         console.log('Database query successful');
 
         // Send response with query result
         res.json(result.rows);
     } catch (error) {
         console.error('Error querying database:', error);
-
     }
 });
-
 app.get('/complex-trend1', async (req, res) => {
     try {
         const arrest = req.query.arrest.toString();
