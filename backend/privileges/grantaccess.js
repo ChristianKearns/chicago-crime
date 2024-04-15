@@ -12,6 +12,8 @@ specific to the table, will have the tuples inserted.
 
 async function grantAccess(session) {
     try {
+
+        // CHUERTA
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "HONGJIESHI"`
         );
@@ -113,6 +115,52 @@ async function grantAccess(session) {
         await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "NIKOLAS.PRASCHMA"`
+        );
+        await session.commit();
+
+        // CHRISTIAN.KEARNS
+
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON PopulationData TO "HONGJIESHI"`
+        );
+        await session.commit();
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON PopulationData TO "CHRISTIAN.KEARNS"`
+        );
+        await session.commit();
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON PopulationData TO "PVENU"`
+        );
+        await session.commit();
+
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON PopulationData TO "CHUERTA"`
+        );
+        await session.commit();
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON PopulationData TO "NIKOLAS.PRASCHMA"`
+        );
+        await session.commit();
+
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Economics TO "HONGJIESHI"`
+        );
+        await session.commit();
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Economics TO "CHRISTIAN.KEARNS"`
+        );
+        await session.commit();
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Economics TO "PVENU"`
+        );
+        await session.commit();
+
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Economics TO "CHUERTA"`
+        );
+        await session.commit();
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Economics TO "NIKOLAS.PRASCHMA"`
         );
         await session.commit();
 
