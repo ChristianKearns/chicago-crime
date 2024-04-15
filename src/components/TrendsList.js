@@ -5,7 +5,7 @@ export default function TrendsList(props) {
     const navigate = useNavigate();
 
     function handleTrendClick(num) {
-        navigate(`/trends/${num}`)    
+        navigate(`/trends/${num}`);
     }
 
     return (
@@ -16,21 +16,16 @@ export default function TrendsList(props) {
             <div className='trends-container'>
                 <div className='trend-container'>
                 <div className='trend-subtitle'>
-                    Chicago’s Criminal Landscape During the Recession
+                    Chicago’s Shot Spotter Reduction TrendS
                 </div>
                 <div className='trend-msg'>
-                    The United States of America underwent a significant economic recession known as the Global Financial 
-                    Crisis(GFC) in 2007-2009. The GFC unfolded over a period of several years traced back to the mid-2000s. 
-                    Now, acquire the top five types of crimes that were prevalent within the GFC (A ranking query). 
-                    How has the rate of the top five ranked crimes fluctuated seven years before and during the GFC 
-                    (2 years)? Study these trend queries as in current times,there is an increase in the cost of living within 
-                    the US. How are the rates of the top five types of change over time within the current times, could they 
-                    indicate a potential economic recession? The goal is to identify a complex trend from the ranking of crime 
-                    types that occur before and during the GFC to predict a potential economic recession. Is there a correlation
-                     between the rates of particular crime types with an economic recession ?
+                    Have there been changes in law enforcement response times to ShotSpotter alerts over time,
+                    and how do these changes correlate with the outcomes of crime incidents? Are there trends
+                    indicating improvements or challenges in police responsiveness to gun violence incidents?
                 </div>
                 <div className={`trend-btn ${props.selectedTrend === "1" ? 'selected' : ''}`} onClick={() => handleTrendClick("1")}>
                     {props.selectedTrend === "1" ? "Selected" : props.buttonType}
+
                 </div>
                 </div>
 

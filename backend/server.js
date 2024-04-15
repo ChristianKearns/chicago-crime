@@ -88,7 +88,8 @@ app.get('/map-markers', async (req, res) => {
     try {
 
         const primaryType = req.query.primaryType.toString();
-        const LOCDescription = req.query.LOCDescription.toString();const startDate = req.query.startDate.toString();
+        const LOCDescription = req.query.LOCDescription.toString();
+        const startDate = req.query.startDate.toString();
         const endDate = req.query.endDate.toString();
         const arrest = req.query.arrest.toString();
         const domestic = req.query.domestic.toString();
@@ -123,6 +124,86 @@ app.get('/map-markers', async (req, res) => {
     }
 });
 
+app.get('/tuple-count', async (req, res) => {
+    try {
+        // Execute database query
+        const result = await session.execute('SELECT \'CrimeType\' AS crimetype, COUNT(*) AS count FROM CrimeType\n' +
+            'UNION ALL\n' +
+            'SELECT \'CrimeIncident\' AS crimeincident, COUNT(*) AS count FROM CrimeIncident\n' +
+            'UNION ALL\n' +
+            'SELECT \'Location\' AS location, COUNT(*) AS count FROM Location\n' +
+            'UNION ALL\n' +
+            'SELECT \'EVENTPERMIT\' AS eventpermit, COUNT(*) AS count FROM EVENTPERMIT\n' +
+            'UNION ALL\n' +
+            'SELECT \'STREETLIGHT\' AS streetlight, COUNT(*) AS count FROM STREETLIGHT\n' +
+            'UNION ALL\n' +
+            'SELECT \'SHOTSPOTTER\' AS shotspotter, COUNT(*) AS count FROM SHOTSPOTTER\n' +
+            'UNION ALL\n' +
+            'SELECT\n' +
+            '    \'Total\' AS table_name,\n' +
+            '    SUM(total_count) AS count\n' +
+            'FROM\n' +
+            '    (SELECT COUNT(*) AS total_count FROM CrimeType\n' +
+            '     UNION ALL\n' +
+            '     SELECT COUNT(*) FROM CrimeIncident\n' +
+            '     UNION ALL\n' +
+            '     SELECT COUNT(*) FROM Location\n' +
+            '     UNION ALL\n' +
+            '     SELECT COUNT(*) FROM EVENTPERMIT\n' +
+            '     UNION ALL\n' +
+            '     SELECT COUNT(*) FROM STREETLIGHT\n' +
+            '     UNION ALL\n' +
+            '     SELECT COUNT(*) FROM SHOTSPOTTER);');
+        console.log('Database query successful');
+
+        // Send response with query result
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error querying database:', error);
+
+    }
+});
+
+app.get('/complex-trend1', async (req, res) => {
+    try {
+        const arrest = req.query.arrest.toString();
+        const year = req.query.year.toString();
+
+        console.log(arrest, year);
+
+        const result = await session.execute(
+            `SELECT
+                TO_CHAR(S.ALERT_DATE, 'MM') AS month,
+                COUNT(C.UNIQUE_ID) AS num_crimes
+            FROM
+                CHUERTA.CRIMEINCIDENT C
+                    INNER JOIN CHUERTA.LOCATION L ON C.UNIQUE_ID = L.CRIME_ID
+                    INNER JOIN CHUERTA.SHOTSPOTTER S ON L.DISTRICT = S.DISTRICT
+            WHERE
+                EXTRACT(YEAR FROM C.INCIDENT_DATE) = EXTRACT(YEAR FROM S.ALERT_DATE)
+                AND EXTRACT(MONTH FROM C.INCIDENT_DATE) = EXTRACT(MONTH FROM S.ALERT_DATE)
+                AND EXTRACT(DAY FROM C.INCIDENT_DATE) = EXTRACT(DAY FROM S.ALERT_DATE)
+                AND EXTRACT(HOUR FROM C.INCIDENT_DATE) = EXTRACT(HOUR FROM S.ALERT_DATE)
+                AND C.CLASSIFIED_AS = 'WEAPONS VIOLATION'
+                AND C.ARREST = :arrest
+                AND S.ROUNDS > 1
+                AND S.ALERT_DATE BETWEEN TO_DATE('01/01/' || :year, 'MM/DD/YYYY') AND TO_DATE('12/31/' || :year, 'MM/DD/YYYY')
+            GROUP BY
+                TO_CHAR(S.ALERT_DATE, 'MM')
+            ORDER BY
+                TO_CHAR(S.ALERT_DATE, 'MM')`,
+            { arrest: arrest,
+                year: year
+            }
+        );
+
+        console.log('Database query successful');
+        console.log(result.rows);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error querying database:', error);
+    }
+});
 
 
 app.get('/', (req, res) => {
@@ -139,6 +220,11 @@ process.on('SIGINT', async () => {
     await session.close();
     process.exit();
 });
+
+
+
+
+
 
 
 /*SELECT 'CrimeType' AS crimetype, COUNT(*) AS count FROM CrimeType
