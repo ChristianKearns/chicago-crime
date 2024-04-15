@@ -39,5 +39,6 @@ export default function Trends() {
         {/* Bottom Section */}
         <TrendsList buttonType="Select" selectedTrend={trend}/>
       </>
+
     )
   }

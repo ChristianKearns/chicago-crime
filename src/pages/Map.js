@@ -1,16 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import {GoogleMap, LoadScript, Marker} from '@react-google-maps/api';
 import AutoPrimaryTypeInput from "../components/PrimaryTypeAutoInput";
 import AutoLocationDescriptionInput from "../components/AutoLocationDescriptionInput";
 import QueryMapInput from "../components/QueryMap";
 import axios from "axios";
 
-class Markers {
-    constructor(latitude, longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
-}
 const ChicagoMap = () => {
 
     const containerStyle = {
@@ -36,22 +30,30 @@ const ChicagoMap = () => {
         zoomControl: true
     };
 
-
-    const [markers, setMarkers] = useState<Markers>([])
+    const [markers, setMarkers] = useState([]);
 
     const fetchCrimeLocations = async () => {
         try {
             const response = await axios.get('http://localhost:3001/map-markers', {
                 params: selectedOptions // Pass selectedOptions as params
             });
-            //set marker data
-            let markers = new Markers(response.data.latitude, response.data.longitude);
-            setMarkers(markers);
+
+            // add data to become google map markers
+
+            const markersList = response.data
+                .map(location => ({
+                    lat: location[0],
+                    lng: location[1]
+                }));
+            setMarkers(markersList);
+
+            console.log('type of markersList:', typeof markersList)
+            console.log('type of lat:', typeof markersList[0].lat)
+            console.log('markersList:', markersList);
         } catch (error) {
             console.error('Error fetching crime locations:', error);
         }
     };
-
 
     const [selectedOptions, setSelectedOptions] = useState({
         primaryType: '',
@@ -157,7 +159,10 @@ const ChicagoMap = () => {
 
                 </div>
                 {showQueryInput && <QueryMapInput onSelect={selectedOptions}/>}
+
             </div>
+
+
 
             <div style={{flex: 1}}>
                 <LoadScript googleMapsApiKey={process.env.REACT_APP_MAP_API_KEY}>
@@ -168,10 +173,9 @@ const ChicagoMap = () => {
                         options={options}
                     >
                         {markers.map((marker, index) => (
-                            <Marker
-                                key={index}
-                                position={{ lat: marker.latitude, lng: marker.longitude }}
-                            />
+                            <Marker key={index} position={
+                                {lat: marker.lat, lng: marker.lng}
+                            }/>
                         ))}
 
                     </GoogleMap>
