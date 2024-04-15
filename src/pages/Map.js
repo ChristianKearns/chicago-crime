@@ -4,7 +4,6 @@ import AutoPrimaryTypeInput from "../components/PrimaryTypeAutoInput";
 import AutoLocationDescriptionInput from "../components/AutoLocationDescriptionInput";
 import QueryMapInput from "../components/QueryMap";
 import axios from "axios";
-import LineGraph from "../components/CT1LineGraph";
 
 const ChicagoMap = () => {
 

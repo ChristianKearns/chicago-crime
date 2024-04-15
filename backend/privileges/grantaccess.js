@@ -15,84 +15,107 @@ async function grantAccess(session) {
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "HONGJIESHI"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "CHRISTIAN.KEARNS"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "PVENU"`
         );
+        await session.commit();
+
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "CHUERTA"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "NIKOLAS.PRASCHMA"`
         );
+        await session.commit();
 
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "HONGJIESHI"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "CHRISTIAN.KEARNS"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "PVENU"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "CHUERTA"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "NIKOLAS.PRASCHMA"`
         );
-
-
-
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON Location TO "HONGJIESHI"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON Location TO "CHRISTIAN.KEARNS"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON Location TO "PVENU"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "CHUERTA"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "NIKOLAS.PRASCHMA"`
         );
+        await session.commit();
 
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "HONGJIESHI"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "CHRISTIAN.KEARNS"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "PVENU"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "CHUERTA"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "NIKOLAS.PRASCHMA"`
         );
-
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "HONGJIESHI"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "CHRISTIAN.KEARNS"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "PVENU"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "CHUERTA"`
         );
+        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "NIKOLAS.PRASCHMA"`
         );
+        await session.commit();
+
 
         console.log('Granting access to all tables successfully');
     } catch (error) {
