@@ -4,7 +4,6 @@ import axios from 'axios';
 
 const CT3LineGraph2 = ({ selectedYear, crimeType, communityArea }) => {
   const [crimeData, setCrimeData] = useState({ labels: [], values: [] });
-  const decimals = 2;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -17,6 +16,7 @@ const CT3LineGraph2 = ({ selectedYear, crimeType, communityArea }) => {
                     }
                 });
                 const data = response.data;
+                console.log(data)
                 const labels = data.map(entry => entry[0]); // Assuming labels are strings (e.g., month names)
                 const values = data.map(entry => entry[1]);
 
@@ -27,7 +27,7 @@ const CT3LineGraph2 = ({ selectedYear, crimeType, communityArea }) => {
         };
 
         fetchData().then(() => console.log('Data fetched!'));
-    }, []);
+    }, [selectedYear, crimeType, communityArea]);
 
     useEffect(() => {
         console.log(crimeData)
@@ -39,7 +39,7 @@ const CT3LineGraph2 = ({ selectedYear, crimeType, communityArea }) => {
                 labels:crimeData.labels,
                 datasets: [
                     {
-                        label: 'Per-Capita-Income',
+                        label: 'Normalized Incident Rate',
                         data: crimeData.values,
                         backgroundColor: '#064FF0',
                         borderColor: '#064FF0',
@@ -57,7 +57,7 @@ const CT3LineGraph2 = ({ selectedYear, crimeType, communityArea }) => {
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Community Areas in Relation to Per-Capita-Income',
+                        text: 'Monthly Normalized Incident Rate',
                     },
                 },
                 maintainAspectRatio: false,

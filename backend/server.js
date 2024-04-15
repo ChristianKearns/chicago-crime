@@ -124,13 +124,19 @@ app.get('/map-markers', async (req, res) => {
     }
 });
 
-/* Trend 3 Stufff */
+/* Trend 3 Stuff */
 app.get('/complex-trend3', async (req, res) => {
     try {
+        const area = req.query.area.toString();
+        const type = req.query.type.toString();
+        const year = req.query.year.toString();
+
+        console.log(area, type, year);
+
         const result = await session.execute(`
         WITH Crime_Trends AS (
             SELECT 
-                EXTRACT(YEAR FROM ci.Incident_Date) AS Year,
+                EXTRACT(MONTH FROM ci.Incident_Date) AS Month,
                 l.Community_Area,
                 COUNT(*) AS Incident_Count
             FROM 
@@ -138,15 +144,15 @@ app.get('/complex-trend3', async (req, res) => {
             JOIN 
                 CHUERTA.Location l ON ci.Unique_ID = l.Crime_ID
             WHERE 
-                EXTRACT(YEAR FROM ci.Incident_Date) = 2021 OR
-                EXTRACT(YEAR FROM ci.Incident_Date) = 2023
+                EXTRACT(YEAR FROM ci.Incident_Date) = :year AND
+                ci.CLASSIFIED_AS = :type
             GROUP BY 
-                EXTRACT(YEAR FROM ci.Incident_Date),
+                EXTRACT(MONTH FROM ci.Incident_Date),
                 l.Community_Area
         ),
         Community_Area_Stats AS (
             SELECT 
-                ct.Year,
+                ct.Month,
                 ct.Community_Area,
                 pd.name,
                 ct.Incident_Count,
@@ -159,26 +165,26 @@ app.get('/complex-trend3', async (req, res) => {
                 Economics e ON ct.Community_Area = e.Community_Area_Number
             LEFT JOIN 
                 PopulationData pd ON ct.Community_Area = pd.Community_Area
+            WHERE e.Community_Area_Name=:area
         )
         SELECT 
-            Year,
-            Community_Area,
-            name,
-            Population,
-            Incident_Count,
-            Per_Capita_Income,
-            Percent_Households_Below_Poverty,
-            Incident_Count / Population AS Normalized_Incident_Rate
+            Month,
+            (Incident_Count / (Population/1000)) AS Normalized_Incident_Rate
         FROM 
             Community_Area_Stats
         ORDER BY 
-            NORMALIZED_INCIDENT_RATE DESC`
-        );
+            Month ASC`
+        ,
+        { 
+            area: area,
+            type: type,
+            year: year
+        });
 
         console.log('Database query successful');
-        console.log(result);
+        console.log(result.rows);
 
-        res.json(result);
+        res.json(result.rows);
     } catch (error) {
         console.error('Error querying database:', error);
         res.status(500).json({ error: 'An error occurred while processing your request' });

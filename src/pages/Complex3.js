@@ -123,7 +123,7 @@ export default function Complex3() {
                 </div>
                 {isGraphVisible && (
                     <div style={{flex: 1, marginLeft: "50px", marginRight: "75px"}}>
-                        <CT3LineGraph2/>
+                        <CT3LineGraph2 crimeType={selectedOptions.crimeType} communityArea={selectedOptions.communityArea} selectedYear={selectedOptions.year}/>
                     </div>
                 )}
             </div>
