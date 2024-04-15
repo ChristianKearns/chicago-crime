@@ -205,6 +205,56 @@ app.get('/complex-trend1', async (req, res) => {
     }
 });
 
+app.get('/complex-trend2', async (req, res) => {
+    try {
+        const year = req.query.year;
+        const arrest = req.query.arrest; // Capture arrest, which can be undefined
+
+        const startDate = `${year}-01-01`;
+        const endDate = `${year}-12-31`;
+
+        console.log(`Querying data for Year: ${year}, Arrest: ${arrest}`);
+
+        // Build dynamic query conditions based on the presence of 'arrest'
+        let additionalConditions = '';
+        if (arrest !== undefined && arrest !== '') {
+            additionalConditions = ` AND CI.Arrest = :arrest`;
+        }
+
+        const query = `
+            SELECT
+                CPS.Police_District,
+                TO_CHAR(CI.Incident_Date, 'YYYY-MM') AS Year_Month,
+                AVG(TO_NUMBER(CPS.Average_Student_Attendance, '99.9')) AS Avg_Student_Attendance,
+                COUNT(CI.UNIQUE_ID) AS Crime_Count
+            FROM
+                CHUERTA.CrimeIncident CI
+            JOIN
+                CHUERTA.Location L ON CI.UNIQUE_ID = L.CRIME_ID
+            JOIN
+                HongjieShi.Chicago_Public_Schools CPS ON L.District = CPS.Police_District
+            WHERE
+                CI.Incident_Date BETWEEN TO_DATE(:startDate, 'YYYY-MM-DD') AND TO_DATE(:endDate, 'YYYY-MM-DD')
+                ${additionalConditions}
+            GROUP BY
+                CPS.Police_District, TO_CHAR(CI.Incident_Date, 'YYYY-MM')
+            ORDER BY
+                CPS.Police_District, Year_Month`;
+
+        const result = await session.execute(query, {
+            startDate,
+            endDate,
+            arrest: (arrest ? arrest : undefined) // Only pass arrest if not empty
+        });
+
+        console.log('Database query successful', result.rows);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error querying database:', error);
+        res.status(500).json({ error: 'An error occurred while processing your request' });
+    }
+});
+
 
 app.get('/', (req, res) => {
     res.send('Hello from our server!')

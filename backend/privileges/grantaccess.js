@@ -12,7 +12,7 @@ specific to the table, will have the tuples inserted.
 
 async function grantAccess(session) {
     try {
-        await session.execute(
+        await session.execute(a
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "HONGJIESHI"`
         );
         await session.execute(
@@ -92,6 +92,22 @@ async function grantAccess(session) {
         );
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "NIKOLAS.PRASCHMA"`
+        );
+
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Chicago_Public_Schools TO "HONGJIESHI"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Chicago_Public_Schools TO "CHRISTIAN.KEARNS"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Chicago_Public_Schools TO "PVENU"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Chicago_Public_Schools TO "CHUERTA"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Chicago_Public_Schools TO "NIKOLAS.PRASCHMA"`
         );
 
         console.log('Granting access to all tables successfully');
