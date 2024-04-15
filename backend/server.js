@@ -162,9 +162,9 @@ app.get('/complex-trend3', async (req, res) => {
             FROM 
                 Crime_Trends ct
             LEFT JOIN 
-                Economics e ON ct.Community_Area = e.Community_Area_Number
+                "CHRISTIAN.KEARNS".Economics e ON ct.Community_Area = e.Community_Area_Number
             LEFT JOIN 
-                PopulationData pd ON ct.Community_Area = pd.Community_Area
+                "CHRISTIAN.KEARNS".PopulationData pd ON ct.Community_Area = pd.Community_Area
             WHERE e.Community_Area_Name=:area
         )
         SELECT 
@@ -195,8 +195,8 @@ app.get('/area-income-info', async(req, res) => {
     try {
         const result = await session.execute(`
             SELECT e.community_area_name, e.per_capita_income, e.percent_households_below_poverty
-            FROM Economics e , PopulationData pd
-            WHERE e.community_area_number = community_area
+            FROM "CHRISTIAN.KEARNS".Economics e , "CHRISTIAN.KEARNS".PopulationData pd
+            WHERE e.community_area_number = pd.community_area
         `
         );
         console.log('Database query successful');
@@ -212,8 +212,8 @@ app.get('/community-areas', async(req, res) => {
     try {
         const result = await session.execute(`
             SELECT UNIQUE e.COMMUNITY_AREA_NAME 
-            FROM Economics e 
-            WHERE COMMUNITY_AREA_NAME != 'CHICAGO'
+            FROM "CHRISTIAN.KEARNS".Economics e 
+            WHERE e.COMMUNITY_AREA_NAME != 'CHICAGO'
             ORDER BY e.COMMUNITY_AREA_NAME ASC
         `
         );
