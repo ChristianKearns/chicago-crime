@@ -1,8 +1,7 @@
 import '../styling/trendlist.css'
 import { useNavigate } from "react-router-dom";
-import CT1lineGraph from "./CT1LineGraph";
 import React from "react";
-import TotalBarGraph from "./TotalBarGraph";
+// import TotalBarGraph from "./TotalBarGraph";
 
 export default function TrendsList(props) {
     const navigate = useNavigate();
@@ -125,11 +124,8 @@ export default function TrendsList(props) {
                         Live count of the total number of tuples in the database.
                     </div>
                     <div className='trend-msg'>
-                        <TotalBarGraph/>
+                        {/* <TotalBarGraph/> */}
                     </div>
-
-
-
                 </div>
             </div>
         </div>
