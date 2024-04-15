@@ -40,13 +40,16 @@ const ChicagoMap = () => {
 
             // add data to become google map markers
 
-            const markersList = response.data.map((location) => {
-                return {
-                    lat: location.Latitude,
-                    lng: location.longitude
-                };
-            } );
+            const markersList = response.data
+                .map(location => ({
+                    lat: location[0],
+                    lng: location[1]
+                }));
             setMarkers(markersList);
+
+            console.log('type of markersList:', typeof markersList)
+            console.log('type of lat:', typeof markersList[0].lat)
+            console.log('markersList:', markersList);
         } catch (error) {
             console.error('Error fetching crime locations:', error);
         }
@@ -162,7 +165,7 @@ const ChicagoMap = () => {
 
 
             <div style={{flex: 1}}>
-                <LoadScript googleMapsApiKey={process.env.MAP_API_KEY}>
+                <LoadScript googleMapsApiKey={process.env.REACT_APP_MAP_API_KEY}>
                     <GoogleMap
                         mapContainerStyle={containerStyle}
                         center={center}
@@ -170,7 +173,9 @@ const ChicagoMap = () => {
                         options={options}
                     >
                         {markers.map((marker, index) => (
-                            <Marker key={index} position={marker}/>
+                            <Marker key={index} position={
+                                {lat: marker.lat, lng: marker.lng}
+                            }/>
                         ))}
 
                     </GoogleMap>
