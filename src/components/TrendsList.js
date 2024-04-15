@@ -18,7 +18,7 @@ export default function TrendsList(props) {
             <div className='trends-container'>
                 <div className='trend-container'>
                     <div className='trend-subtitle'>
-                        Chicago’s Shot Spotter Reduction TrendS
+                        Chicago’s Shot Spotter Reduction Trends
                     </div>
                     <div className='trend-msg'>
                         Have there been changes in law enforcement response times to ShotSpotter alerts over time,
