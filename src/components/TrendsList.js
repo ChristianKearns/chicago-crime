@@ -51,16 +51,13 @@ export default function TrendsList(props) {
         
                 <div className='trend-container'>
                 <div className='trend-subtitle'>
-                    Violent Crimes with Relation to Video Games
+                    Criminality in Relation to COVID-19
                 </div>
                 <div className='trend-msg'>
-                    How have violent crimes, particularly among boys between the ages of 18 and 25 changed over the 
-                    past 23 years as video games have become increasingly more mainstream. How do these trends change in
-                    districts in relation to the wealth of each district? While crime is generally expected to rise with
-                    relation to more impoverished economic conditions, does this rise decrease in the target demographic
-                    of 18 to 25 year old boys due to a lack of access to consoles necessary to play violent video 
-                    games growing up? These constraints can help to investigate the question of whether violent video 
-                    games can cause boys to become violent once they reach adulthood.
+                    How was criminality affected by the drastic living changes caused by the coronavirus? Additionally, how was this 
+                    change affected by the economic stature of each community area in Chicago, and which crime types were affected? The months
+                    from 2019 to 2023 are analyzed to better understand the changes in criminality during the lifespan of COVID19, and in the
+                    months that followed it.
                 </div>
                 <div className={`trend-btn ${props.selectedTrend === "3" ? 'selected' : ''}`} onClick={() => handleTrendClick("3")}>
                     {props.selectedTrend === "3" ? "Selected" : props.buttonType}
