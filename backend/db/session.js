@@ -11,8 +11,8 @@ async function db () {
     try {
         // Establish connection with credentials
         const session = await oracledb.getConnection({
-            user: process.env.UF_DB_USERNAME, // Use environment variable for username
-            password: process.env.UF_DB_PASSWORD, // Use environment variable for password
+            user: process.env.REACT_APP_UF_DB_USERNAME, // Use environment variable for username
+            password: process.env.REACT_APP_UF_DB_PASSWORD, // Use environment variable for password
             connectString: 'oracle.cise.ufl.edu:1521/orcl' // Example connectString; adjust according to your Oracle database configuration
         });
         console.log('Connected to Oracle database');

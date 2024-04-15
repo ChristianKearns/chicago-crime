@@ -123,6 +123,70 @@ app.get('/map-markers', async (req, res) => {
     }
 });
 
+app.get('/trend-three', async (req, res) => {
+    try {
+        const result = await session.execute(`
+               WITH Crime_Trends AS (
+                SELECT 
+                    EXTRACT(YEAR FROM ci.Incident_Date) AS Year,
+                    ci.Classified_As AS Crime_Category,
+                    l.Community_Area,
+                    COUNT(*) AS Incident_Count
+                FROM 
+                    CHUERTA.CrimeIncident ci
+                JOIN 
+                    CHUERTA.Location l ON ci.Unique_ID = l.Crime_ID
+                WHERE 
+                    EXTRACT(YEAR FROM ci.Incident_Date) = 2021 OR
+                    EXTRACT(YEAR FROM ci.Incident_Date) = 2023
+                GROUP BY 
+                    EXTRACT(YEAR FROM ci.Incident_Date),
+                    ci.Classified_As,
+                    l.Community_Area
+            ),
+            Community_Area_Stats AS (
+                SELECT 
+                    ct.Year,
+                    ct.Crime_Category,
+                    ct.Community_Area,
+                    pd.name,
+                    ct.Incident_Count,
+                    e.Per_Capita_Income,
+                    e.Percent_Households_Below_Poverty,
+                    pd.Population
+                FROM 
+                    Crime_Trends ct
+                LEFT JOIN 
+                    Economics e ON ct.Community_Area = e.Community_Area_Number
+                LEFT JOIN 
+                    PopulationData pd ON ct.Community_Area = pd.Community_Area
+            )
+            SELECT 
+                Year,
+                Crime_Category,
+                Community_Area,
+                name,
+                Population,
+                Incident_Count,
+                Per_Capita_Income,
+                Percent_Households_Below_Poverty,
+                Incident_Count / Population AS Normalized_Incident_Rate
+            FROM 
+                Community_Area_Stats
+            ORDER BY 
+                NORMALIZED_INCIDENT_RATE DESC`
+        );
+
+        console.log('Database query successful');
+        console.log(result);
+
+        res.json(result);
+    } catch (error) {
+        console.error('Error querying database:', error);
+        res.status(500).json({ error: 'An error occurred while processing your request' });
+    }
+});
+
 
 
 app.get('/', (req, res) => {

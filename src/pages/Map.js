@@ -160,7 +160,7 @@ const ChicagoMap = () => {
             </div>
 
             <div style={{flex: 1}}>
-                <LoadScript googleMapsApiKey={process.env.MAP_API_KEY}>
+                <LoadScript googleMapsApiKey={process.env.REACT_APP_MAP_API_KEY}>
                     <GoogleMap
                         mapContainerStyle={containerStyle}
                         center={center}
