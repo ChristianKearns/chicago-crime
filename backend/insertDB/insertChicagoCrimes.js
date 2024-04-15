@@ -139,7 +139,7 @@ function readCSVFile(filePath) {
     });
 }
 // Path to your CSV file
-const filePath = '.\\csv_files\\Crimes2023.csv';
+const filePath = '.\\csv_files\\Crimes2019.csv';
 
 // Read CSV file and extract data
 readCSVFile(filePath)

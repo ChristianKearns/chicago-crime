@@ -21,7 +21,7 @@ The insert script is used to insert data into the tables created in the models.M
 
 
 **** Chuerta Filled tables ****
-Crimes table is filled with data from the year 2023,2022,2021.
+Crimes table is filled with data from the year 2023,2022,2021,2020,2019.
 Shotspotter table is entirely filled.
 Event Permit table is entirely filled.
 Street Light table is entirely filled. 
