@@ -1,8 +1,7 @@
 import '../styling/trendlist.css'
 import { useNavigate } from "react-router-dom";
-import CT1lineGraph from "./CT1LineGraph";
 import React from "react";
-import TotalBarGraph from "./TotalBarGraph";
+// import TotalBarGraph from "./TotalBarGraph";
 
 export default function TrendsList(props) {
     const navigate = useNavigate();
@@ -64,26 +63,18 @@ export default function TrendsList(props) {
                 </div>
 
                 <div className='trend-container'>
-                    <div className='trend-subtitle'>
-                        Violent Crimes with Relation to Video Games
-                    </div>
-                    <div className='trend-msg'>
-                        How have violent crimes, particularly among boys between the ages of 18 and 25 changed over the
-                        past 23 years as video games have become increasingly more mainstream. How do these trends
-                        change in
-                        districts in relation to the wealth of each district? While crime is generally expected to rise
-                        with
-                        relation to more impoverished economic conditions, does this rise decrease in the target
-                        demographic
-                        of 18 to 25 year old boys due to a lack of access to consoles necessary to play violent video
-                        games growing up? These constraints can help to investigate the question of whether violent
-                        video
-                        games can cause boys to become violent once they reach adulthood.
-                    </div>
-                    <div className={`trend-btn ${props.selectedTrend === "3" ? 'selected' : ''}`}
-                         onClick={() => handleTrendClick("3")}>
-                        {props.selectedTrend === "3" ? "Selected" : props.buttonType}
-                    </div>
+                <div className='trend-subtitle'>
+                    Criminality in Relation to COVID-19
+                </div>
+                <div className='trend-msg'>
+                    How was criminality affected by the drastic living changes caused by the coronavirus? Additionally, how was this 
+                    change affected by the economic stature of each community area in Chicago, and which crime types were affected? The months
+                    from 2019 to 2023 are analyzed to better understand the changes in criminality during the lifespan of COVID19, and in the
+                    months that followed it.
+                </div>
+                <div className={`trend-btn ${props.selectedTrend === "3" ? 'selected' : ''}`} onClick={() => handleTrendClick("3")}>
+                    {props.selectedTrend === "3" ? "Selected" : props.buttonType}
+                </div>
                 </div>
 
                 <div className='trend-container'>
@@ -133,11 +124,8 @@ export default function TrendsList(props) {
                         Live count of the total number of tuples in the database.
                     </div>
                     <div className='trend-msg'>
-                        <TotalBarGraph/>
+                        {/* <TotalBarGraph/> */}
                     </div>
-
-
-
                 </div>
             </div>
         </div>

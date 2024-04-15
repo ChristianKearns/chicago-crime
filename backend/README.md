@@ -26,6 +26,10 @@ Shotspotter table is entirely filled.
 Event Permit table is entirely filled.
 Street Light table is entirely filled. 
 
+**** Christian.Kearns Filled tables ****
+Economics table is entirely filled.
+PopulationData table is entirely filled.
+
 Thus, other members do not have to run the insert script for these tables as they are already filled.
 except for the crime table, we can run the insert script for addtional years. 
 
