@@ -220,7 +220,7 @@ app.get('/available-years', async (req, res) => {
     }
 });
 
-// Modified /complex-trend2 endpoint to filter by district if provided
+// Modified /complex-trend2 endpoint to filter by district
 app.get('/complex-trend2', async (req, res) => {
     const { district } = req.query;
     try {

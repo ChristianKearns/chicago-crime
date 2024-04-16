@@ -64,10 +64,10 @@ const Complex2 = () => {
             backgroundColor: colorGenerator(),
             fill: false,
             tension: 0.4, // This makes the line smooth
-            yAxisID: 'y1', // Assuming a secondary Y axis for crime count
+            yAxisID: 'y1', 
         };
 
-        const labels = availableYears; // Assuming the X-axis is based on years
+        const labels = availableYears; 
 
         setChartData({
             labels,
