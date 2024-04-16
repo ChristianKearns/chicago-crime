@@ -40,24 +40,10 @@ export default function TrendsList(props) {
                         Crime in Relation to Socioeconomic Conditions
                     </div>
                     <div className='trend-msg'>
-                        Analyzing educational data (such as test scores, graduation rates, and college readiness scores)
-                        alongside
-                        comprehensive crime statistics for those areas would be necessary to investigate the
-                        relationship between
-                        education quality and crime, as well as how school district rankings within Chicago correlate
-                        with surrounding
-                        neighborhood crime rates, with a focus on burglary, vandalism, assault, and robbery. To find
-                        patterns and
-                        correlations, we would combine socioeconomic and demographic data with data from public
-                        databases, including
-                        the Chicago Police Department and the Illinois State Board of Education. And by analyzing the
-                        socioeconomic
-                        factors, it may show the degree to which educational achievements impact or are impacted by
-                        regional crime
-                        statistics. This investigation seeks to identify patterns in neighborhood safety and school
-                        district performance,
-                        offering insights into the intricate relationship between Chicago's crime dynamics and
-                        educational quality.
+                        Are student attendance rates affected by the amount of crime in their district?
+                        We're looking into whether there's a link between how often students show up to school and the crime levels in their neighborhoods in Chicago.
+                        By checking out the numbers on both school attendance and local crime, we want to see if there's a pattern that shows if more crime might mean fewer kids making it to school.
+                        This study could help us understand how feeling safe or not can change how likely students are to attend class.
                     </div>
                     <div className={`trend-btn ${props.selectedTrend === "2" ? 'selected' : ''}`}
                          onClick={() => handleTrendClick("2")}>
