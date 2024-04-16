@@ -128,14 +128,14 @@ app.get('/complex-trend3', async (req, res) => {
     try {
         const area = req.query.area.toString();
         const type = req.query.type.toString();
-        const year = req.query.year.toString();
 
-        console.log(area, type, year);
+        console.log(area, type);
 
         const result = await session.execute(`
         WITH Crime_Trends AS (
             SELECT 
                 EXTRACT(MONTH FROM ci.Incident_Date) AS Month,
+                EXTRACT(YEAR FROM ci.Incident_Date) AS Year,
                 l.Community_Area,
                 COUNT(*) AS Incident_Count
             FROM 
@@ -143,20 +143,17 @@ app.get('/complex-trend3', async (req, res) => {
             JOIN 
                 CHUERTA.Location l ON ci.Unique_ID = l.Crime_ID
             WHERE 
-                EXTRACT(YEAR FROM ci.Incident_Date) = :year AND
-                ci.CLASSIFIED_AS = :type
+                ci.CLASSIFIED_AS=:type
             GROUP BY 
                 EXTRACT(MONTH FROM ci.Incident_Date),
+                EXTRACT(YEAR FROM ci.Incident_Date),
                 l.Community_Area
         ),
         Community_Area_Stats AS (
             SELECT 
                 ct.Month,
-                ct.Community_Area,
-                pd.name,
+                ct.Year,
                 ct.Incident_Count,
-                e.Per_Capita_Income,
-                e.Percent_Households_Below_Poverty,
                 pd.Population
             FROM 
                 Crime_Trends ct
@@ -168,70 +165,18 @@ app.get('/complex-trend3', async (req, res) => {
         )
         SELECT 
             Month,
+            Year,
             (Incident_Count / (Population/1000)) AS Normalized_Incident_Rate
         FROM 
             Community_Area_Stats
         ORDER BY 
-            Month ASC`
+            Year ASC, Month ASC`
         ,
         {
             area: area,
-            type: type,
-            year: year
+            type: type
         });
 
-        console.log('Database query successful');
-        console.log(result.rows);
-
-        res.json(result.rows);
-    } catch (error) {
-        console.error('Error querying database:', error);
-        res.status(500).json({ error: 'An error occurred while processing your request' });
-    }
-});
-
-
-/*Trend 4*/
-app.get('/complex-trend4', async (req, res) => {
-    try {
-
-
-        const Classified_As = req.query.Classified_As.toString();
-        console.log(Classified_As);
-
-        const result = await session.execute(`
-                    WITH Streetlights AS (
-                        SELECT TO_CHAR(stl.CREATION_DATE, 'MM') AS Month,
-                        TO_CHAR(stl.CREATION_DATE, 'YYYY') AS Year,
-                        COUNT(*) AS StreetLampsOut
-                    FROM CHUERTA.STREETLIGHT stl
-                    WHERE stl.CREATION_DATE > DATE '2016-01-01'
-                    GROUP BY TO_CHAR(stl.CREATION_DATE, 'MM'), TO_CHAR(stl.CREATION_DATE, 'YYYY')
-                        ),
-                        Crimes AS (
-                    SELECT TO_CHAR(ci.INCIDENT_DATE, 'MM') AS Month,
-                        TO_CHAR(ci.INCIDENT_DATE, 'YYYY') AS Year,
-                        ci.CLASSIFIED_AS,
-                        COUNT(*) AS Crime_Count
-                    FROM PVENU.CRIMEINCIDENT ci
-                        JOIN PVENU.LOCATION loc ON ci.UNIQUE_ID = loc.CRIME_ID
-                    WHERE ci.INCIDENT_DATE >= DATE '2016-01-01'
-                      AND ci.CLASSIFIED_AS =: Classified_As -- Filter by the input crime type
-                    GROUP BY TO_CHAR(ci.INCIDENT_DATE, 'MM'), TO_CHAR(ci.INCIDENT_DATE, 'YYYY'), ci.CLASSIFIED_AS
-                        )
-                    SELECT COALESCE(s.Month, c.Month) AS Month,
-                    COALESCE(s.Year, c.Year) AS Year,
-                    s.StreetLampsOut,
-                    c.CLASSIFIED_AS,
-                    SUM(c.Crime_Count) AS Total_Crimes
-                    FROM Streetlights s
-                        LEFT JOIN Crimes c ON s.Month = c.Month AND s.Year = c.Year
-                    GROUP BY COALESCE(s.Month, c.Month), COALESCE(s.Year, c.Year), s.StreetLampsOut, c.CLASSIFIED_AS
-                    ORDER BY COALESCE(s.Year, c.Year) ASC, COALESCE(s.Month, c.Month) ASC`,
-            {
-                Classified_As: Classified_As
-            });
-        console.log('Here ---------- :' + Classified_As);
         console.log('Database query successful');
         console.log(result.rows);
 
@@ -287,6 +232,60 @@ app.get('/crime-types', async(req, res) => {
         );
         console.log('Database query successful');
         console.log(result.rows);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error querying database:', error);
+        res.status(500).json({ error: 'An error occurred while processing your request' });
+    }
+});
+
+/* End Complex Trend 3 Stuff */
+
+
+/*Trend 4*/
+app.get('/complex-trend4', async (req, res) => {
+    try {
+
+
+        const Classified_As = req.query.Classified_As.toString();
+        console.log(Classified_As);
+
+        const result = await session.execute(`
+                    WITH Streetlights AS (
+                        SELECT TO_CHAR(stl.CREATION_DATE, 'MM') AS Month,
+                        TO_CHAR(stl.CREATION_DATE, 'YYYY') AS Year,
+                        COUNT(*) AS StreetLampsOut
+                    FROM CHUERTA.STREETLIGHT stl
+                    WHERE stl.CREATION_DATE > DATE '2016-01-01'
+                    GROUP BY TO_CHAR(stl.CREATION_DATE, 'MM'), TO_CHAR(stl.CREATION_DATE, 'YYYY')
+                        ),
+                        Crimes AS (
+                    SELECT TO_CHAR(ci.INCIDENT_DATE, 'MM') AS Month,
+                        TO_CHAR(ci.INCIDENT_DATE, 'YYYY') AS Year,
+                        ci.CLASSIFIED_AS,
+                        COUNT(*) AS Crime_Count
+                    FROM PVENU.CRIMEINCIDENT ci
+                        JOIN PVENU.LOCATION loc ON ci.UNIQUE_ID = loc.CRIME_ID
+                    WHERE ci.INCIDENT_DATE >= DATE '2016-01-01'
+                      AND ci.CLASSIFIED_AS =: Classified_As -- Filter by the input crime type
+                    GROUP BY TO_CHAR(ci.INCIDENT_DATE, 'MM'), TO_CHAR(ci.INCIDENT_DATE, 'YYYY'), ci.CLASSIFIED_AS
+                        )
+                    SELECT COALESCE(s.Month, c.Month) AS Month,
+                    COALESCE(s.Year, c.Year) AS Year,
+                    s.StreetLampsOut,
+                    c.CLASSIFIED_AS,
+                    SUM(c.Crime_Count) AS Total_Crimes
+                    FROM Streetlights s
+                        LEFT JOIN Crimes c ON s.Month = c.Month AND s.Year = c.Year
+                    GROUP BY COALESCE(s.Month, c.Month), COALESCE(s.Year, c.Year), s.StreetLampsOut, c.CLASSIFIED_AS
+                    ORDER BY COALESCE(s.Year, c.Year) ASC, COALESCE(s.Month, c.Month) ASC`,
+            {
+                Classified_As: Classified_As
+            });
+        console.log('Here ---------- :' + Classified_As);
+        console.log('Database query successful');
+        console.log(result.rows);
+
         res.json(result.rows);
     } catch (error) {
         console.error('Error querying database:', error);

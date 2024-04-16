@@ -6,8 +6,7 @@ import axios from 'axios';
 export default function Complex3() {
     const [selectedOptions, setSelectedOptions] = useState({
         communityArea: '',
-        crimeType: '',
-        year: ''
+        crimeType: ''
     });
     const [isGraphVisible, setIsGraphVisible] = useState(false);
     const [crimeType, setCrimeType] = useState(null);
@@ -51,8 +50,6 @@ export default function Complex3() {
         setIsGraphVisible(true);
     };
 
-    const years = ['2019', '2020', '2021', '2022', '2023'];
-
     return (
         <>
             <div className='graphs-container'>
@@ -91,18 +88,6 @@ export default function Complex3() {
                         ))}
                     </select>
                     )}
-                    <label style={{marginRight: "10px"}}>Start Date:</label>
-                    <select
-                        value={selectedOptions.year}
-                        onChange={(e) => handleOptionChange(e, 'year')}
-                        style={{marginRight: "20px"}}
-                    >
-                        <option value="">Select Year</option>
-                        {years.map((year) => (
-                            <option key={year} value={year}>{year}</option>
-                        ))}
-                    </select>
-
                     <button 
                         onClick={handleShowGraph}
                         style={{width: '100px', padding: '5px', marginLeft: 'auto', marginRight: 'auto'}}
