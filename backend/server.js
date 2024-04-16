@@ -224,24 +224,35 @@ app.get('/available-years', async (req, res) => {
 app.get('/complex-trend2', async (req, res) => {
     const { district } = req.query;
     try {
-        const result = await session.execute(`
-            SELECT
-                SPR.District,
-                SPR.Progress_Report_Year AS Year,
-                AVG(SPR.Student_Attendance_Avg_Pct) AS Avg_Student_Attendance,
-                COUNT(CI.UNIQUE_ID) AS Crime_Count
-            FROM
-                HongjieShi.School_Progress_Reports SPR
-            LEFT JOIN
-                CHUERTA.Location L ON SPR.District = L.District
-            LEFT JOIN
-                CHUERTA.CrimeIncident CI ON L.CRIME_ID = CI.UNIQUE_ID
-            ${district ? 'WHERE SPR.District = :district' : ''}
-            GROUP BY
-                SPR.District, SPR.Progress_Report_Year
-            ORDER BY
-                SPR.District, SPR.Progress_Report_Year
-        `, district ? { district } : {});
+        const query = `
+            SELECT District, Progress_Report_Year AS Year, AVG(Student_Attendance_Avg_Pct) AS Avg_Student_Attendance, COUNT(Crime_ID) AS Crime_Count
+            FROM (
+                SELECT 
+                    SPR.District, 
+                    SPR.Progress_Report_Year, 
+                    SPR.Student_Attendance_Avg_Pct,
+                    CI.UNIQUE_ID AS Crime_ID
+                FROM HongjieShi.School_Progress_Reports SPR
+                LEFT JOIN CHUERTA.Location L ON SPR.District = L.District
+                LEFT JOIN CHUERTA.CrimeIncident CI ON L.CRIME_ID = CI.UNIQUE_ID AND EXTRACT(YEAR FROM CI.Incident_Date) = TO_NUMBER(SPR.Progress_Report_Year)
+                
+                UNION ALL
+                
+                SELECT 
+                    SPR.District, 
+                    SPR.Progress_Report_Year, 
+                    SPR.Student_Attendance_Avg_Pct,
+                    CI.UNIQUE_ID AS Crime_ID
+                FROM HongjieShi.School_Progress_Reports SPR
+                LEFT JOIN PVENU.Location L ON SPR.District = L.District
+                LEFT JOIN PVENU.CrimeIncident CI ON L.CRIME_ID = CI.UNIQUE_ID AND EXTRACT(YEAR FROM CI.Incident_Date) = TO_NUMBER(SPR.Progress_Report_Year)
+            ) Combined
+            ${district ? 'WHERE District = :district' : ''}
+            GROUP BY District, Progress_Report_Year
+            ORDER BY District, Progress_Report_Year
+        `;
+
+        const result = await session.execute(query, district ? { district } : {});
 
         const formattedData = result.rows.map(row => ({
             district: row[0],
