@@ -325,6 +325,62 @@ app.get('/complex-trend1', async (req, res) => {
     }
 });
 
+/* Trend 5 */
+app.get('/complex-trend5', async (req, res) => {
+    try {
+        const district = req.query.district.toString();
+        const year = req.query.year.toString();
+        console.log("LOGGING DISTRICT");
+        console.log(district);
+        console.log("LOGGING YEAR");
+        console.log(year);
+
+        const result = await session.execute(
+            `WITH monthly_crime_counts AS (
+                SELECT
+                    ci.Classified_As AS crime_category,
+                    TO_CHAR(ci.Incident_Date, 'MM') AS month,
+                    l.District,
+                    TO_CHAR(ci.Incident_Date, 'YYYY') AS year
+                FROM
+                    CHUERTA.CRIMEINCIDENT ci
+                JOIN
+                    CHUERTA.LOCATION l ON ci.Unique_ID = l.Crime_ID
+                JOIN
+                    CHUERTA.CRIMETYPE c ON ci.Classified_As = c.PrimaryType
+                WHERE
+                    TO_CHAR(ci.Incident_Date, 'YYYY') = :year
+                    AND District = :district
+            )
+            SELECT
+                crime_category,
+                month,
+                district,
+                year,
+                COUNT(*) AS crime_count
+            FROM
+                monthly_crime_counts
+            GROUP BY
+                crime_category,
+                month,
+                district,
+                year
+            ORDER BY
+                crime_category,
+                month,
+                district`,
+            { district: district,
+              year: year,
+            }
+        );
+
+        console.log('Complex5 query successful');
+        console.log(result.rows);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error querying database:', error);
+    }
+});
 
 app.get('/', (req, res) => {
     res.send('Hello from our server!')
