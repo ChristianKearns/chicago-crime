@@ -12,159 +12,120 @@ specific to the table, will have the tuples inserted.
 
 async function grantAccess(session) {
     try {
-
-        // CHUERTA
-        await session.execute(
+        await session.execute(a
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "HONGJIESHI"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "CHRISTIAN.KEARNS"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "PVENU"`
         );
-        await session.commit();
-
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "CHUERTA"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeIncident TO "NIKOLAS.PRASCHMA"`
         );
-        await session.commit();
 
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "HONGJIESHI"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "CHRISTIAN.KEARNS"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "PVENU"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "CHUERTA"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "NIKOLAS.PRASCHMA"`
         );
-        await session.commit();
+
+
+
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON Location TO "HONGJIESHI"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON Location TO "CHRISTIAN.KEARNS"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON Location TO "PVENU"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "CHUERTA"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON CrimeType TO "NIKOLAS.PRASCHMA"`
         );
-        await session.commit();
 
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "HONGJIESHI"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "CHRISTIAN.KEARNS"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "PVENU"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "CHUERTA"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON EventPermit TO "NIKOLAS.PRASCHMA"`
         );
-        await session.commit();
+
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "HONGJIESHI"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "CHRISTIAN.KEARNS"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "PVENU"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "CHUERTA"`
         );
-        await session.commit();
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON StreetLight TO "NIKOLAS.PRASCHMA"`
         );
-        await session.commit();
-
-        // CHRISTIAN.KEARNS
-/*
-        await session.execute(
-            `GRANT SELECT, INSERT, UPDATE, DELETE ON PopulationData TO "HONGJIESHI"`
-        );
-        await session.commit();
-        await session.execute(
-            `GRANT SELECT, INSERT, UPDATE, DELETE ON PopulationData TO "CHRISTIAN.KEARNS"`
-        );
-        await session.commit();
-        await session.execute(
-            `GRANT SELECT, INSERT, UPDATE, DELETE ON PopulationData TO "PVENU"`
-        );
-        await session.commit();
 
         await session.execute(
-            `GRANT SELECT, INSERT, UPDATE, DELETE ON PopulationData TO "CHUERTA"`
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Chicago_Public_Schools TO "HONGJIESHI"`
         );
-        await session.commit();
         await session.execute(
-            `GRANT SELECT, INSERT, UPDATE, DELETE ON PopulationData TO "NIKOLAS.PRASCHMA"`
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Chicago_Public_Schools TO "CHRISTIAN.KEARNS"`
         );
-        await session.commit();
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Chicago_Public_Schools TO "PVENU"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Chicago_Public_Schools TO "CHUERTA"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON Chicago_Public_Schools TO "NIKOLAS.PRASCHMA"`
+        );
 
         await session.execute(
-            `GRANT SELECT, INSERT, UPDATE, DELETE ON Economics TO "HONGJIESHI"`
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON School_Progress_Reports TO "HONGJIESHI"`
         );
-        await session.commit();
         await session.execute(
-            `GRANT SELECT, INSERT, UPDATE, DELETE ON Economics TO "CHRISTIAN.KEARNS"`
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON School_Progress_Reports TO "CHRISTIAN.KEARNS"`
         );
-        await session.commit();
         await session.execute(
-            `GRANT SELECT, INSERT, UPDATE, DELETE ON Economics TO "PVENU"`
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON School_Progress_Reports TO "PVENU"`
         );
-        await session.commit();
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON School_Progress_Reports TO "CHUERTA"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON School_Progress_Reports TO "NIKOLAS.PRASCHMA"`
+        );
 
-        await session.execute(
-            `GRANT SELECT, INSERT, UPDATE, DELETE ON Economics TO "CHUERTA"`
-        );
-        await session.commit();
-        await session.execute(
-            `GRANT SELECT, INSERT, UPDATE, DELETE ON Economics TO "NIKOLAS.PRASCHMA"`
-        );
-        await session.commit();
-
-*/
         console.log('Granting access to all tables successfully');
     } catch (error) {
         console.error('Error granting access:', error);
