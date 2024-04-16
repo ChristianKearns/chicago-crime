@@ -1,25 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import CT2LineGraph from "../components/CT2LineGraph";
-import CT2BarGraph from "../components/CT2BarGraph";
 import axios from 'axios';
+import CT2LineGraph from "../components/CT2LineGraph";
 
 const Complex2 = () => {
-    const [selectedOptions, setSelectedOptions] = useState({ arrest: '', year: '' });
+    const [district, setDistrict] = useState('');
+    const [availableYears, setAvailableYears] = useState([]);
     const [chartData, setChartData] = useState(null);
-    const [isGraphVisible, setIsGraphVisible] = useState(false);
-    const [visibleDistricts, setVisibleDistricts] = useState(new Set(['1']));  // Initialize with only district 1 visible
-    const [dataByDistrict, setDataByDistrict] = useState({}); // Manage district data in state
 
     useEffect(() => {
-        if (selectedOptions.year && isGraphVisible) {
+        fetchYears();
+    }, []);
+
+    useEffect(() => {
+        if (district) {
             fetchData();
         }
-    }, [selectedOptions, isGraphVisible]);
+    }, [district]);
+
+    const fetchYears = async () => {
+        try {
+            const response = await axios.get('http://localhost:3001/available-years');
+            setAvailableYears(response.data);
+        } catch (error) {
+            console.error('Error fetching years:', error);
+        }
+    };
 
     const fetchData = async () => {
         try {
             const response = await axios.get('http://localhost:3001/complex-trend2', {
-                params: { year: selectedOptions.year, arrest: selectedOptions.arrest }
+                params: { district }
             });
             processChartData(response.data);
         } catch (error) {
@@ -29,100 +39,51 @@ const Complex2 = () => {
     };
 
     const processChartData = (data) => {
-        const newDataByDistrict = data.reduce((acc, [district, yearMonth, avgAttendance, crimeCount]) => {
-            if (!acc[district]) {
-                acc[district] = {
-                    label: `District ${district}`,
-                    attendanceData: [],
-                    crimeData: [],
-                    labels: [],
-                };
-            }
-            acc[district].labels.push(yearMonth);
-            acc[district].attendanceData.push(avgAttendance);
-            acc[district].crimeData.push(crimeCount);
-            return acc;
-        }, {});
+        const colorGenerator = () => `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`;
 
-        setDataByDistrict(newDataByDistrict);
+        const attendanceDataset = {
+            label: `Avg Student Attendance`,
+            data: data.map(item => ({
+                x: item.year,
+                y: item.avgStudentAttendance
+            })),
+            borderColor: colorGenerator(),
+            backgroundColor: 'rgba(0, 0, 0, 0)', // Transparent background for the line
+            fill: false,
+            tension: 0.4, // This makes the line smooth
+            yAxisID: 'y',
+        };
 
-        const datasets = Object.entries(newDataByDistrict).flatMap(([district, info]) => {
-            const isVisible = visibleDistricts.has(district);
-            return [
-                {
-                    label: `${info.label} - Attendance`,
-                    data: info.attendanceData,
-                    borderColor: 'rgb(75, 192, 235)',
-                    backgroundColor: 'rgba(75, 192, 235, 0.5)',
-                    yAxisID: 'y',
-                    hidden: !isVisible,
-                },
-                {
-                    label: `${info.label} - Crime Count`,
-                    data: info.crimeData,
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    yAxisID: 'y1',
-                    hidden: !isVisible,
-                }
-            ];
-        });
+        const crimeCountDataset = {
+            label: `Crime Count`,
+            data: data.map(item => ({
+                x: item.year,
+                y: item.crimeCount
+            })),
+            borderColor: colorGenerator(),
+            backgroundColor: colorGenerator(),
+            fill: false,
+            tension: 0.4, // This makes the line smooth
+            yAxisID: 'y1', // Assuming a secondary Y axis for crime count
+        };
+
+        const labels = availableYears; // Assuming the X-axis is based on years
 
         setChartData({
-            labels: Object.values(newDataByDistrict)[0]?.labels,
-            datasets,
-        });
-    };
-
-    const toggleDistrictVisibility = (district) => {
-        const newVisibleDistricts = new Set(visibleDistricts);
-        if (newVisibleDistricts.has(district)) {
-            newVisibleDistricts.delete(district);
-        } else {
-            newVisibleDistricts.add(district);
-        }
-        setVisibleDistricts(newVisibleDistricts);
-    };
-
-    const handleOptionChange = (event, option) => {
-        setSelectedOptions({
-            ...selectedOptions,
-            [option]: event.target.value
+            labels,
+            datasets: [attendanceDataset, crimeCountDataset]
         });
     };
 
     return (
         <div className='graphs-container'>
-            <p>Explore the relationship between monthly crime counts and average student attendance in Chicago police districts.</p>
-            <div style={{ marginTop: '20px' }}>
-                <label>Arrest:</label>
-                <select value={selectedOptions.arrest} onChange={(e) => handleOptionChange(e, 'arrest')} style={{ marginRight: '10px' }}>
-                    <option value="">Select Arrest</option>
-                    <option value="false">False</option>
-                    <option value="true">True</option>
-                </select>
-                <label>Year:</label>
-                <select value={selectedOptions.year} onChange={(e) => handleOptionChange(e, 'year')}>
-                    <option value="">Select Year</option>
-                    {['2021', '2022', '2023'].map(year => (
-                        <option key={year} value={year}>{year}</option>
-                    ))}
-                </select>
-                <button onClick={() => setIsGraphVisible(!isGraphVisible)}>Toggle Graphs</button>
-            </div>
-            {isGraphVisible && chartData && (
-                <>
-                    <CT2LineGraph chartData={chartData} />
-                    <CT2BarGraph chartData={chartData} />
-                </>
-            )}
+            <p>Explore the relationship between crime counts and student attendance across districts.</p>
             <div>
-                {Object.keys(dataByDistrict).map(district => (
-                    <button key={district} onClick={() => toggleDistrictVisibility(district)}>
-                        Toggle District {district}
-                    </button>
-                ))}
+                <label>District:</label>
+                <input value={district} onChange={e => setDistrict(e.target.value)} placeholder="Enter District" />
+                <button onClick={fetchData}>Show Graphs</button>
             </div>
+            {chartData && <CT2LineGraph chartData={chartData} />}
         </div>
     );
 };

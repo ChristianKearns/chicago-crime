@@ -110,6 +110,22 @@ async function grantAccess(session) {
             `GRANT SELECT, INSERT, UPDATE, DELETE ON Chicago_Public_Schools TO "NIKOLAS.PRASCHMA"`
         );
 
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON School_Progress_Reports TO "HONGJIESHI"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON School_Progress_Reports TO "CHRISTIAN.KEARNS"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON School_Progress_Reports TO "PVENU"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON School_Progress_Reports TO "CHUERTA"`
+        );
+        await session.execute(
+            `GRANT SELECT, INSERT, UPDATE, DELETE ON School_Progress_Reports TO "NIKOLAS.PRASCHMA"`
+        );
+
         console.log('Granting access to all tables successfully');
     } catch (error) {
         console.error('Error granting access:', error);

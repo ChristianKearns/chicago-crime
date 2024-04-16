@@ -1,78 +1,69 @@
 const db = require('../db/session');
 const { readCSV } = require('./csvReader.js');
 
-// Function to insert data into Oracle database
-async function insertSchoolRecordsIntoOracle(data) {
+// Function to insert school progress report data into Oracle database
+async function insertSchoolProgressReports(data) {
     let session;
     try {
         session = await db;
 
-        // Arrays to store data for bulk insertion
-        const schoolRecordDataArray = [];
-
         // Iterate through the data, skipping the header row
         for (let i = 1; i < data.length; i++) {
             const row = data[i];
-            console.log("row:", i);
 
-            // Extract data for Chicago_Public_Schools table
-            const schoolRecordData = {
+            // Construct the data object for insertion
+            const progressReportData = {
                 SchoolID: row[0],
-                SchoolName: row[1],
-                SchoolLevel: row[2],
-                StreetAddress: row[3],
-                PhoneNumber: row[4],
-                AverageStudentAttendance: row[5],
-                RateOfMisconductsPer100Students: row[6],
-                AverageTeacherAttendance: row[7],
-                CollegeEligibilityPercent: row[8],
-                GraduationRatePercent: row[9],
-                CollegeEnrollmentRatePercent: row[10],
-                CollegeEnrollmentNumberOfStudents: row[11],
-                FreshmanOnTrackRatePercent: row[12],
-                XCoordinate: row[13],
-                YCoordinate: row[14],
-                Latitude: row[15],
-                Longitude: row[16],
-                CommunityAreaNumber: row[17],
-                CommunityAreaName: row[18],
-                Ward: row[19],
-                PoliceDistrict: row[20],
-                Location: row[21]
+                LongName: row[1],
+                PrimaryCategory: row[2],
+                Address: row[3],
+                City: row[4],
+                State: row[5],
+                Zip: row[6],
+                Phone: row[7],
+                ProgressReportYear: row[8],
+                StudentAttendanceYear1Pct: row[9],
+                StudentAttendanceYear2Pct: row[10],
+                StudentAttendanceAvgPct: row[11],
+                TeacherAttendanceYear1Pct: row[12],
+                TeacherAttendanceYear2Pct: row[13],
+                TeacherAttendanceAvgPct: row[14],
             };
 
-            // Push data for bulk insertion
-            schoolRecordDataArray.push(schoolRecordData);
+            // Define the SQL query for insertion
+            const progressReportQuery = `
+                INSERT INTO School_Progress_Reports (
+                    School_ID, Long_Name, Primary_Category, Address, City, State, Zip, Phone,
+                    Progress_Report_Year, Student_Attendance_Year_1_Pct, Student_Attendance_Year_2_Pct,
+                    Student_Attendance_Avg_Pct, Teacher_Attendance_Year_1_Pct, Teacher_Attendance_Year_2_Pct,
+                    Teacher_Attendance_Avg_Pct
+                ) VALUES (
+                    :SchoolID, :LongName, :PrimaryCategory, :Address, :City, :State, :Zip, :Phone,
+                    :ProgressReportYear, :StudentAttendanceYear1Pct, :StudentAttendanceYear2Pct,
+                    :StudentAttendanceAvgPct, :TeacherAttendanceYear1Pct, :TeacherAttendanceYear2Pct,
+                    :TeacherAttendanceAvgPct
+                )`;
+
+            try {
+                // Attempt to insert the record
+                await session.execute(progressReportQuery, progressReportData);
+            } catch (error) {
+                // If a unique constraint violation occurs, log and skip
+                if (error.errorNum === 1) {
+                    console.log(`Skipping duplicate record for School_ID ${progressReportData.SchoolID} and Progress_Report_Year ${progressReportData.ProgressReportYear}.`);
+                } else {
+                    // Rethrow if the error is not related to unique constraint violation
+                    throw error;
+                }
+            }
         }
 
-        // Bulk insertion into Chicago_Public_Schools table
-        const schoolRecordQuery = `
-            INSERT INTO Chicago_Public_Schools (
-                School_ID, School_Name, School_Level, Street_Address, Phone_Number,
-                Average_Student_Attendance, Rate_of_Misconducts_per_100_students, Average_Teacher_Attendance,
-                College_Eligibility_Percent, Graduation_Rate_Percent, College_Enrollment_Rate_Percent,
-                College_Enrollment_number_of_students, Freshman_on_Track_Rate_Percent, X_COORDINATE,
-                Y_COORDINATE, Latitude, Longitude, Community_Area_Number, Community_Area_Name,
-                Ward, Police_District, Location
-            ) VALUES (
-                :SchoolID, :SchoolName, :SchoolLevel, :StreetAddress, :PhoneNumber,
-                :AverageStudentAttendance, :RateOfMisconductsPer100Students, :AverageTeacherAttendance,
-                :CollegeEligibilityPercent, :GraduationRatePercent, :CollegeEnrollmentRatePercent,
-                :CollegeEnrollmentNumberOfStudents, :FreshmanOnTrackRatePercent, :XCoordinate,
-                :YCoordinate, :Latitude, :Longitude, :CommunityAreaNumber, :CommunityAreaName,
-                :Ward, :PoliceDistrict, :Location
-            )`;
-
-        await session.executeMany(schoolRecordQuery, schoolRecordDataArray);
-        await session.execute('commit');
-
-        console.log('School records inserted successfully into Oracle database.');
-        await session.close();
+        // Commit changes if all insertions (or skips) are successful
+        await session.commit();
+        console.log('School progress report records insertion process completed.');
     } catch (error) {
-        console.error('Error inserting school records into Oracle database:', error);
-        if (session) {
-            await session.rollbackTransaction();
-        }
+        console.error('Error inserting school progress report records into Oracle database:', error);
+        await session.rollback();
     } finally {
         if (session) {
             try {
@@ -84,15 +75,14 @@ async function insertSchoolRecordsIntoOracle(data) {
     }
 }
 
-
-const filePath = '.\\csv_files\\School_report.csv';
+// Path to the CSV file
+const filePath = '.\\csv_files\\Chicago_Public_Schools_-_School_Progress_Reports_SY1523_20240415.csv';
 
 // Read CSV file and extract data
 readCSV(filePath)
     .then(records => {
-        insertSchoolRecordsIntoOracle(records).then(() => console.log('Completed inserting data into Oracle database'));
+        insertSchoolProgressReports(records).then(() => console.log('Completed inserting data into Oracle database'));
     })
     .catch(error => {
         console.error('Error reading CSV file:', error);
     });
-

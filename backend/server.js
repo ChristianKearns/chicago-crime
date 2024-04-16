@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./db/session');
 
-
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -205,55 +204,60 @@ app.get('/complex-trend1', async (req, res) => {
     }
 });
 
-app.get('/complex-trend2', async (req, res) => {
+//start of complex 2
+// Endpoint to fetch all available years
+app.get('/available-years', async (req, res) => {
     try {
-        const year = req.query.year;
-        const arrest = req.query.arrest; // Capture arrest, which can be undefined
+        const result = await session.execute(`
+            SELECT DISTINCT Progress_Report_Year FROM HongjieShi.School_Progress_Reports ORDER BY Progress_Report_Year
+        `);
 
-        const startDate = `${year}-01-01`;
-        const endDate = `${year}-12-31`;
-
-        console.log(`Querying data for Year: ${year}, Arrest: ${arrest}`);
-
-        // Build dynamic query conditions based on the presence of 'arrest'
-        let additionalConditions = '';
-        if (arrest !== undefined && arrest !== '') {
-            additionalConditions = ` AND CI.Arrest = :arrest`;
-        }
-
-        const query = `
-            SELECT
-                CPS.Police_District,
-                TO_CHAR(CI.Incident_Date, 'YYYY-MM') AS Year_Month,
-                AVG(TO_NUMBER(CPS.Average_Student_Attendance, '99.9')) AS Avg_Student_Attendance,
-                COUNT(CI.UNIQUE_ID) AS Crime_Count
-            FROM
-                CHUERTA.CrimeIncident CI
-            JOIN
-                CHUERTA.Location L ON CI.UNIQUE_ID = L.CRIME_ID
-            JOIN
-                HongjieShi.Chicago_Public_Schools CPS ON L.District = CPS.Police_District
-            WHERE
-                CI.Incident_Date BETWEEN TO_DATE(:startDate, 'YYYY-MM-DD') AND TO_DATE(:endDate, 'YYYY-MM-DD')
-                ${additionalConditions}
-            GROUP BY
-                CPS.Police_District, TO_CHAR(CI.Incident_Date, 'YYYY-MM')
-            ORDER BY
-                CPS.Police_District, Year_Month`;
-
-        const result = await session.execute(query, {
-            startDate,
-            endDate,
-            arrest: (arrest ? arrest : undefined) // Only pass arrest if not empty
-        });
-
-        console.log('Database query successful', result.rows);
-        res.json(result.rows);
+        const years = result.rows.map(row => row[0]);
+        res.json(years);
     } catch (error) {
         console.error('Error querying database:', error);
-        res.status(500).json({ error: 'An error occurred while processing your request' });
+        res.status(500).json({ error: 'An error occurred while processing your request.' });
     }
 });
+
+// Modified /complex-trend2 endpoint to filter by district if provided
+app.get('/complex-trend2', async (req, res) => {
+    const { district } = req.query;
+    try {
+        const result = await session.execute(`
+            SELECT
+                SPR.District,
+                SPR.Progress_Report_Year AS Year,
+                AVG(SPR.Student_Attendance_Avg_Pct) AS Avg_Student_Attendance,
+                COUNT(CI.UNIQUE_ID) AS Crime_Count
+            FROM
+                HongjieShi.School_Progress_Reports SPR
+            LEFT JOIN
+                CHUERTA.Location L ON SPR.District = L.District
+            LEFT JOIN
+                CHUERTA.CrimeIncident CI ON L.CRIME_ID = CI.UNIQUE_ID
+            ${district ? 'WHERE SPR.District = :district' : ''}
+            GROUP BY
+                SPR.District, SPR.Progress_Report_Year
+            ORDER BY
+                SPR.District, SPR.Progress_Report_Year
+        `, district ? { district } : {});
+
+        const formattedData = result.rows.map(row => ({
+            district: row[0],
+            year: row[1],
+            avgStudentAttendance: row[2],
+            crimeCount: row[3]
+        }));
+
+        res.json(formattedData);
+    } catch (error) {
+        console.error('Error querying database:', error);
+        res.status(500).json({ error: 'An error occurred while processing your request.' });
+    }
+});
+
+//end of complex 2
 
 
 app.get('/', (req, res) => {
