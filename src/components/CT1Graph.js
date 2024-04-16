@@ -4,7 +4,7 @@ import { Chart as ChartJS, defaults } from "chart.js/auto";
 import { Line,Bar } from 'react-chartjs-2';
 
 const CT1Graph = ({selectedYear,gunshots}) => {
-    const [crimeData, setCrimeData] = useState({ labels: [], values: [],alerts: [] });
+    const [crimeData, setCrimeData] = useState({ labels: [], values: [] });
 
 
     useEffect(() => {
@@ -19,9 +19,8 @@ const CT1Graph = ({selectedYear,gunshots}) => {
                 const data = response.data;
                 const labels = data.map(entry => entry[0]); // Assuming labels are strings (e.g., month names)
                 const values = data.map(entry => entry[1]);
-                const alerts = data.map(entry => entry[2]);
 
-                setCrimeData({ labels, values, alerts });
+                setCrimeData({ labels, values});
 
 
             } catch (error) {
