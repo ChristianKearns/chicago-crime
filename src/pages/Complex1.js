@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CT1lineGraph from "../components/CT1LineGraph";
+import CT1Graph from "../components/CT1Graph";
 
 export default function Complex1() {
     const [selectedOptions, setSelectedOptions] = useState({
@@ -30,7 +31,9 @@ export default function Complex1() {
                 <p>
                     Have there been changes in law enforcement response times,within the hour, to the ShotSpotter alerts over time,
                     and how do these changes correlate with the outcomes of crime incidents involving single or multiple gunshots? Are there trends
-                    indicating improvements or challenges in police responsiveness to gun violence incidents, in particular, weapon violations?
+                    indicating improvements or challenges in police responsiveness to gun violence incidents, in particular, homicides? What are the
+                    implications of these trends for the community and law enforcement on regards to shot spotter on homicides? Is the shot spotter system effective
+                    in reducing homicides in the community?
                 </p>
 
                 {/* Input fields for arrest and year */}
@@ -77,7 +80,7 @@ export default function Complex1() {
 
                 {isGraphVisible && (
                     <div style={{ flex: 1, marginLeft: "25px", marginRight: "50px" }}>
-                        percentage of gun violence incidents involving single or multiple gunshots
+                       <CT1Graph gunshots={selectedOptions.gunshots} selectedYear={selectedOptions.year}/>
                     </div>
                 )}
 

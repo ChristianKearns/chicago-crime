@@ -22,9 +22,11 @@ export default function TrendsList(props) {
                         Chicago’s Shot Spotter Reduction Trends
                     </div>
                     <div className='trend-msg'>
-                        Have there been changes in law enforcement response times to ShotSpotter alerts over time,
-                        and how do these changes correlate with the outcomes of crime incidents? Are there trends
-                        indicating improvements or challenges in police responsiveness to gun violence incidents?
+                        Have there been changes in law enforcement response times,within the hour, to the ShotSpotter alerts over time,
+                        and how do these changes correlate with the outcomes of crime incidents involving single or multiple gunshots? Are there trends
+                        indicating improvements or challenges in police responsiveness to gun violence incidents, in particular, homicides? What are the
+                        implications of these trends for the community and law enforcement on regards to shot spotter on homicides? Is the shot spotter system effective
+                        in reducing homicides in the community?
                     </div>
                     <div className={`trend-btn ${props.selectedTrend === "1" ? 'selected' : ''}`}
                          onClick={() => handleTrendClick("1")}>
