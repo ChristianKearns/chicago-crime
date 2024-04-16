@@ -325,6 +325,61 @@ app.get('/complex-trend1', async (req, res) => {
     }
 });
 
+//start of complex 2
+// Endpoint to fetch all available years
+app.get('/available-years', async (req, res) => {
+    try {
+        const result = await session.execute(`
+            SELECT DISTINCT Progress_Report_Year FROM HongjieShi.School_Progress_Reports ORDER BY Progress_Report_Year
+        `);
+
+        const years = result.rows.map(row => row[0]);
+        res.json(years);
+    } catch (error) {
+        console.error('Error querying database:', error);
+        res.status(500).json({ error: 'An error occurred while processing your request.' });
+    }
+});
+
+// Modified /complex-trend2 endpoint to filter by district
+app.get('/complex-trend2', async (req, res) => {
+    const { district } = req.query;
+    try {
+        const result = await session.execute(`
+            SELECT
+                SPR.District,
+                SPR.Progress_Report_Year AS Year,
+                AVG(SPR.Student_Attendance_Avg_Pct) AS Avg_Student_Attendance,
+                COUNT(CI.UNIQUE_ID) AS Crime_Count
+            FROM
+                HongjieShi.School_Progress_Reports SPR
+            LEFT JOIN
+                CHUERTA.Location L ON SPR.District = L.District
+            LEFT JOIN
+                CHUERTA.CrimeIncident CI ON L.CRIME_ID = CI.UNIQUE_ID
+            ${district ? 'WHERE SPR.District = :district' : ''}
+            GROUP BY
+                SPR.District, SPR.Progress_Report_Year
+            ORDER BY
+                SPR.District, SPR.Progress_Report_Year
+        `, district ? { district } : {});
+
+        const formattedData = result.rows.map(row => ({
+            district: row[0],
+            year: row[1],
+            avgStudentAttendance: row[2],
+            crimeCount: row[3]
+        }));
+
+        res.json(formattedData);
+    } catch (error) {
+        console.error('Error querying database:', error);
+        res.status(500).json({ error: 'An error occurred while processing your request.' });
+    }
+});
+
+//end of complex 2
+
 /* Trend 5 */
 app.get('/complex-trend5', async (req, res) => {
     try {
