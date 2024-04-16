@@ -381,6 +381,7 @@ app.get('/complex-trend1', async (req, res) => {
     try {
         const arrest = req.query.arrest.toString();
         const year = req.query.year.toString();
+        const gunshot = req.query.gunshots.toString();
 
         console.log(arrest, year);
 
@@ -397,16 +398,17 @@ app.get('/complex-trend1', async (req, res) => {
                 AND EXTRACT(MONTH FROM C.INCIDENT_DATE) = EXTRACT(MONTH FROM S.ALERT_DATE)
                 AND EXTRACT(DAY FROM C.INCIDENT_DATE) = EXTRACT(DAY FROM S.ALERT_DATE)
                 AND EXTRACT(HOUR FROM C.INCIDENT_DATE) = EXTRACT(HOUR FROM S.ALERT_DATE)
-                AND C.CLASSIFIED_AS = 'WEAPONS VIOLATION'
+                AND C.CLASSIFIED_AS = 'HOMICIDE'
                 AND C.ARREST = :arrest
-                AND S.ROUNDS > 1
+                AND S.INCIDENT_TYPE_DESCRIPTION = :gunshot
                 AND S.ALERT_DATE BETWEEN TO_DATE('01/01/' || :year, 'MM/DD/YYYY') AND TO_DATE('12/31/' || :year, 'MM/DD/YYYY')
             GROUP BY
                 TO_CHAR(S.ALERT_DATE, 'MM')
             ORDER BY
                 TO_CHAR(S.ALERT_DATE, 'MM')`,
             { arrest: arrest,
-                year: year
+                year: year,
+                gunshot:gunshot
             }
         );
 

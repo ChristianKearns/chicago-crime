@@ -7,8 +7,8 @@ const CT1lineGraph = ({selectedYear,gunshots}) => {
     // create true string
     const trueString = 'true';
     const falseString = 'false';
-    const [crimeData, setCrimeData] = useState({ labels: [], values: [],percents: []});
-    const [crimeDataF, setCrimeDataF] = useState({ labels: [], percents: [] });
+    const [crimeData, setCrimeData] = useState({ labels: [], values: []});
+    const [crimeDataF, setCrimeDataF] = useState({ labels: [] });
 
     useEffect(() => {
         const fetchData = async (arrest) => {
