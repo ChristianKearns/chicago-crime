@@ -82,18 +82,13 @@ export default function TrendsList(props) {
 
                 <div className='trend-container'>
                     <div className='trend-subtitle'>
-                        Criminal Activity During the Holidays
+                        Instances of Crime in Relation to Street Light Outages
                     </div>
                     <div className='trend-msg'>
-                        Since many crimes are focused around thievery, neighborhoods are a big source of crime. Around
-                        Christmas time those
-                        who are less fortunate might resort to stealing and other crime. We want to investigate if the
-                        proximity of
-                        holidays causes an influx in crime. Furthermore, if we compared any changes to the average
-                        amount spent during the
-                        holiday season, would we see a relationship with the amount spent on gifts and the amount of
-                        crime committed? Our
-                        goal is to see if holidays and average holiday spending have any effect on crime.
+                        Is there a correlation between streetlight outages and crime incidents?
+                        Many criminals would like to avoid getting caught, resulting in a possible focus of stealth when committing crimes.
+                        We want to see if there is a correlation between the amount of streetlight outages in an area and the number of crimes committed.
+                        Furthermore, we want to explore whether the absence of streetlights lead to an increase in certain types of crimes.
                     </div>
                     <div className={`trend-btn ${props.selectedTrend === "4" ? 'selected' : ''}`}
                          onClick={() => handleTrendClick("4")}>

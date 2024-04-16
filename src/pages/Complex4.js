@@ -42,7 +42,10 @@ export default function Complex4({Classified_As}) {
         <>
             <div className='graphs-container'>
                 {/* Text description */}
-
+                <p>
+                    Is there a correlation between the amount of streetlight outages in an area and the number of crimes committed?
+                    Furthermore, do the absence of streetlights lead to an increase in certain types of crimes?
+                </p>
                 {/* Input fields for arrest and year */}
                 <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', marginTop: '20px'}}>
                     <label style={{marginRight: "10px"}}>Crime Type:</label>
