@@ -288,8 +288,8 @@ app.get('/complex-trend1', async (req, res) => {
     try {
         const arrest = req.query.arrest.toString();
         const year = req.query.year.toString();
-
-        console.log(arrest, year);
+        const gunshots = req.query.gunshots.toString();
+        console.log(arrest, year, gunshots);
 
         const result = await session.execute(
             `SELECT
@@ -306,19 +306,19 @@ app.get('/complex-trend1', async (req, res) => {
                 AND EXTRACT(HOUR FROM C.INCIDENT_DATE) = EXTRACT(HOUR FROM S.ALERT_DATE)
                 AND C.CLASSIFIED_AS = 'WEAPONS VIOLATION'
                 AND C.ARREST = :arrest
-                AND S.ROUNDS > 1
+                AND S.INCIDENT_TYPE_DESCRIPTION =: gunshots
                 AND S.ALERT_DATE BETWEEN TO_DATE('01/01/' || :year, 'MM/DD/YYYY') AND TO_DATE('12/31/' || :year, 'MM/DD/YYYY')
             GROUP BY
                 TO_CHAR(S.ALERT_DATE, 'MM')
             ORDER BY
                 TO_CHAR(S.ALERT_DATE, 'MM')`,
             { arrest: arrest,
-                year: year
+                year: year,
+                gunshots: gunshots
             }
         );
 
-        console.log('Database query successful');
-        console.log(result.rows);
+        console.log('Complex1 query successful');
         res.json(result.rows);
     } catch (error) {
         console.error('Error querying database:', error);

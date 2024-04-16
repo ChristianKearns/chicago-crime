@@ -3,33 +3,44 @@ import axios from 'axios';
 import { Chart as ChartJS, defaults } from "chart.js/auto";
 import { Line } from 'react-chartjs-2';
 
-const CT1lineGraph = ({ arrest, selectedYear }) => {
+const CT1lineGraph = ({selectedYear,gunshots}) => {
+    // create true string
+    const trueString = 'true';
+    const falseString = 'false';
     const [crimeData, setCrimeData] = useState({ labels: [], values: [] });
+    const [crimeDataF, setCrimeDataF] = useState({ labels: [], values: [] });
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async (arrest) => {
             try {
                 const response = await axios.get('http://localhost:3001/complex-trend1', {
                     params: {
                         year: selectedYear,
                         arrest: arrest,
+                        gunshots: gunshots
                     }
                 });
                 const data = response.data;
                 const labels = data.map(entry => entry[0]); // Assuming labels are strings (e.g., month names)
                 const values = data.map(entry => entry[1]);
 
-                setCrimeData({ labels, values });
+                if(arrest === trueString){
+                    setCrimeData({ labels, values });
+                } else {
+                    setCrimeDataF({ labels, values });
+                }
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
-        fetchData().then(() => console.log('Data fetched!'));
+        fetchData(trueString).then(() => console.log('Data fetched!'));
+        fetchData(falseString).then(() => console.log('Data fetched!'));
 
         // Cleanup function
 
-    }, [arrest, selectedYear]);
+    }, [selectedYear,gunshots]);
 
     return (
         <div className="App">
@@ -39,10 +50,16 @@ const CT1lineGraph = ({ arrest, selectedYear }) => {
                         labels:crimeData.labels,
                         datasets: [
                             {
-                                label: 'Crimes',
+                                label: 'Arrest Made',
                                 data: crimeData.values,
                                 backgroundColor: '#064FF0',
                                 borderColor: '#064FF0',
+                            },
+                            {
+                                label: 'No Arrest Made',
+                                data: crimeDataF.values,
+                                backgroundColor: '#FF0000',
+                                borderColor: '#FF0000',
                             },
                         ],
                     }}

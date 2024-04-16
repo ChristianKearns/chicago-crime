@@ -119,7 +119,7 @@ async function grantAccess(session) {
         await session.commit();
 
         // CHRISTIAN.KEARNS
-
+/*
         await session.execute(
             `GRANT SELECT, INSERT, UPDATE, DELETE ON PopulationData TO "HONGJIESHI"`
         );
@@ -164,7 +164,7 @@ async function grantAccess(session) {
         );
         await session.commit();
 
-
+*/
         console.log('Granting access to all tables successfully');
     } catch (error) {
         console.error('Error granting access:', error);

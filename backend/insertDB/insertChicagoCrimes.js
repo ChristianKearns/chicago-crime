@@ -13,6 +13,7 @@ async function insertDataIntoOracle(data) {
         // Initialize sets for unique crime types and locations
         const distinctCrimeTypes = new Set();
         const uniqueLocations = new Set();
+        const distinctCrimes = new Set();
 
         // Arrays to store data for bulk insertion
         const incidentDataArray = [];
@@ -23,8 +24,8 @@ async function insertDataIntoOracle(data) {
         for (let i = 1; i < data.length; i++) {
             const row = data[i];
             console.log('row:', i)
-            // Extract data for CrimeIncident table
-            const incidentData = {
+
+            distinctCrimes.add({
                 UniqueID: row[0],
                 CaseNumber: row[1],
                 IncidentDate: row[2],
@@ -36,7 +37,8 @@ async function insertDataIntoOracle(data) {
                 Beat: row[10],
                 Ward: row[12],
                 FBICode: row[14]
-            };
+
+            });
 
             // Collect unique crime types
             distinctCrimeTypes.add(row[5]);
@@ -53,11 +55,13 @@ async function insertDataIntoOracle(data) {
                 District: row[11]
             });
 
-            // Push data for bulk insertion
-            incidentDataArray.push(incidentData);
         }
 
         // Push data for bulk insertion into CrimeType and Location arrays
+        for(let crime of distinctCrimes){
+            incidentDataArray.push(crime);
+        }
+
         for (let type of distinctCrimeTypes) {
             crimeTypeDataArray.push([type]);
         }
